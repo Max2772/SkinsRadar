@@ -1,0 +1,200 @@
+[
+    {
+        "name": "US Dollar",
+        "steam_code": 1,
+        "symbol": "$",
+        "iso_code": "USD"
+    },
+    {
+        "name": "British Pound",
+        "steam_code": 2,
+        "symbol": "£",
+        "iso_code": "GBP"
+    },
+    {
+        "name": "Euro",
+        "steam_code": 3,
+        "symbol": "€",
+        "iso_code": "EUR"
+    },
+    {
+        "name": "Russian Rubles",
+        "steam_code": 5,
+        "symbol": "₽",
+        "iso_code": "RUB"
+    },
+    {
+        "name": "Brazilian Real",
+        "steam_code": 7,
+        "symbol": "R$",
+        "iso_code": "BRL"
+    },
+    {
+        "name": "Japanese Yen",
+        "steam_code": 8,
+        "symbol": "¥",
+        "iso_code": "JPY"
+    },
+    {
+        "name": "Norwegian Krone",
+        "steam_code": 9,
+        "symbol": "kr",
+        "iso_code": "NOK"
+    },
+    {
+        "name": "Malaysian Ringgit",
+        "steam_code": 11,
+        "symbol": "RM",
+        "iso_code": "MYR"
+    },
+    {
+        "name": "Philippine Peso",
+        "steam_code": 12,
+        "symbol": "₱",
+        "iso_code": "PHP"
+    },
+    {
+        "name": "Singapore Dollar",
+        "steam_code": 13,
+        "symbol": "S$",
+        "iso_code": "SGD"
+    },
+    {
+        "name": "Thai Baht",
+        "steam_code": 14,
+        "symbol": "฿",
+        "iso_code": "THB"
+    },
+    {
+        "name": "Vietnamese Dong",
+        "steam_code": 15,
+        "symbol": "₫",
+        "iso_code": "VND"
+    },
+    {
+        "name": "South Korean Won",
+        "steam_code": 16,
+        "symbol": "₩",
+        "iso_code": "KRW"
+    },
+    {
+        "name": "Turkish Lira",
+        "steam_code": 17,
+        "symbol": "₺",
+        "iso_code": "TRY"
+    },
+    {
+        "name": "Mexican Peso",
+        "steam_code": 19,
+        "symbol": "$",
+        "iso_code": "MXN"
+    },
+    {
+        "name": "Canadian Dollar",
+        "steam_code": 20,
+        "symbol": "$",
+        "iso_code": "CAD"
+    },
+    {
+        "name": "Australian Dollar",
+        "steam_code": 21,
+        "symbol": "$",
+        "iso_code": "AUD"
+    },
+    {
+        "name": "New Zealand Dollar",
+        "steam_code": 22,
+        "symbol": "$",
+        "iso_code": "NZD"
+    },
+    {
+        "name": "Chinese Yuan",
+        "steam_code": 23,
+        "symbol": "¥",
+        "iso_code": "CNY"
+    },
+    {
+        "name": "Indian Rupee",
+        "steam_code": 24,
+        "symbol": "₹",
+        "iso_code": "INR"
+    },
+    {
+        "name": "Chilean Peso",
+        "steam_code": 25,
+        "symbol": "$",
+        "iso_code": "CLP"
+    },
+    {
+        "name": "Colombian Peso",
+        "steam_code": 27,
+        "symbol": "$",
+        "iso_code": "COP"
+    },
+    {
+        "name": "Hong Kong Dollar",
+        "steam_code": 29,
+        "symbol": "HK$",
+        "iso_code": "HKD"
+    },
+    {
+        "name": "Taiwan Dollar",
+        "steam_code": 30,
+        "symbol": "NT$",
+        "iso_code": "TWD"
+    },
+    {
+        "name": "Saudi Riyal",
+        "steam_code": 31,
+        "symbol": "SR",
+        "iso_code": "SAR"
+    },
+    {
+        "name": "UAE Dirham",
+        "steam_code": 32,
+        "symbol": "د.إ",
+        "iso_code": "AED"
+    },
+    {
+        "name": "Swedish Krona",
+        "steam_code": 33,
+        "symbol": "kr",
+        "iso_code": "SEK"
+    },
+    {
+        "name": "Argentine Peso",
+        "steam_code": 34,
+        "symbol": "$",
+        "iso_code": "ARS"
+    },
+    {
+        "name": "Israeli Shekel",
+        "steam_code": 35,
+        "symbol": "₪",
+        "iso_code": "ILS"
+    },
+    {
+        "name": "Kuwaiti Dinar",
+        "steam_code": 38,
+        "symbol": "KD",
+        "iso_code": "KWD"
+    },
+    {
+        "name": "Qatari Riyal",
+        "steam_code": 39,
+        "symbol": "QR",
+        "iso_code": "QAR"
+    },
+    {
+        "name": "Costa Rican Colón",
+        "steam_code": 40,
+        "symbol": "₡",
+        "iso_code": "CRC"
+    },
+    {
+        "name": "Uruguayan Peso",
+        "steam_code": 41,
+        "symbol": "$",
+        "iso_code": "UYU"
+    }
+]
