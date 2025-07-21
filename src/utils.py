@@ -104,10 +104,10 @@ def is_skin_boosted(history_data, max_boost: float) -> bool:
                 prices.append(float(entry[1]))
                 sales.append(int(entry[2]))
         except (ValueError, TypeError) as e:
-            logger.error(f"Ошибка в обработке записи {entry}: {e}")
+            logger.error(get_message("utils", "is_skin_boosted_entry_error", str(entry), str(e)))
 
     if not prices:
-        logger.info("Нет данных о продажах за последние 30 дней")
+        logger.info(get_message("utils", "is_skin_boosted_no_sales_data"))
         return False
 
     # avg_price = sum(prices) / len(prices) could be used for more complicated check
@@ -121,7 +121,7 @@ def is_skin_boosted(history_data, max_boost: float) -> bool:
             max_price = max(price, max_price)
 
     if min_price == float('inf') or max_price == 0:
-        logger.info("Нет цен с достаточными продажами или min_price равен 0")
+        logger.info(get_message("utils", "is_skin_boosted_no_valid_prices"))
         return False
 
     # To remove debug later
@@ -143,7 +143,7 @@ def get_total_sales(data) -> int:
             if one_month_ago <= entry_date:
                 total_sales += int(entry[2])
         except ValueError as e:
-            logger.error(f"Ошибка в формате даты: {entry[0]}, ошибка: {e}")
+            logger.error(get_message("utils", "get_total_sales_date_error", entry[0], str(e)))
     return total_sales
 
 def has_patches(data_skins_table) -> bool:

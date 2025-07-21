@@ -18,13 +18,13 @@ def fetch_and_process_skins():
         return skins_data
 
     except httpx.RequestError as e:
-        logger.error(f"Ошибка загрузки данных: {e}")
+        logger.error(get_message("skins_manager", "fetch_and_process_skins_request_error", str(e)))
         return []
     except KeyError as e:
-        logger.error(f"Ошибка в структуре JSON: отсутствует ключ {e}")
+        logger.error(get_message("skins_manager", "fetch_and_process_skins_key_error", str(e)))
         return []
     except Exception as e:
-        logger.error(f"Прочая ошибка: {e}")
+        logger.error(get_message("skins_manager", "fetch_and_process_skins_general_error", str(e)))
         return []
 
 async def create_and_populate_db(skins_data) -> None:
@@ -50,14 +50,14 @@ async def create_and_populate_db(skins_data) -> None:
                 size += 1
 
             await conn.commit()
-            logger.info(f"Успешно сохранено {size} скинов в БД")
+            logger.info(get_message("skins_manager", "create_and_populate_db_success",  size))
 
     except aiosqlite.Error as e:
-        logger.error(f"Ошибка БД скинов: {e}")
+        logger.error(get_message("skins_manager", "create_and_populate_db_db_error", str(e)))
     except KeyError as e:
-        logger.error(f"Ошибка в JSON: отсутствует ключ {e}")
+        logger.error(get_message("skins_manager", "create_and_populate_db_key_error", str(e)))
     except Exception as e:
-        logger.error(f"Прочая ошибка: {e}")
+        logger.error(get_message("skins_manager", "create_and_populate_db_general_error",  str(e)))
 
 async def get_item_nameid(full_skin_name: str):
     try:
@@ -69,11 +69,11 @@ async def get_item_nameid(full_skin_name: str):
 
             result = await cursor.fetchone()
             if not result:
-                logger.error("Скин не найден в БД")
+                logger.error(get_message("skins_manager", "get_item_nameid_not_found", full_skin_name))
                 return None
             return result[0]
     except aiosqlite.Error as e:
-        logger.error(f"Ошибка БД скинов: {e}")
+        logger.error(get_message("skins_manager", "get_item_nameid_db_error",  str(e)))
         return None
 
 async def get_full_skin_name_nameid(item_nameid: str):
@@ -86,11 +86,11 @@ async def get_full_skin_name_nameid(item_nameid: str):
 
             result = await cursor.fetchone()
             if not result:
-                logger.error("Скин не найден в БД")
+                logger.error(get_message("skins_manager", "get_full_skin_name_nameid_not_found",  item_nameid))
                 return None
             return result[0]
     except aiosqlite.Error as e:
-        logger.error(f"Ошибка БД скинов: {e}")
+        logger.error(get_message("skins_manager", "get_full_skin_name_nameid_db_error",  str(e)))
         return None
 
 async def reset_search_state():
@@ -105,9 +105,9 @@ async def reset_search_state():
             """)
             await cursor.execute("INSERT OR REPLACE INTO search_state (last_rowid) VALUES (1)")
             await conn.commit()
-            logger.info("Состояние поиска сброшено: таблица пересоздана с last_rowid = 1")
+            logger.info(get_message("skins_manager", "reset_search_state_success"))
     except aiosqlite.Error as e:
-        logger.error(f"Ошибка при сбросе состояния поиска: {e}")
+        logger.error(get_message("skins_manager", "reset_search_state_db_error", str(e)))
 
 async def get_item_autosearch(souvenir: bool, stattrak: bool, knife: bool):
     try:
@@ -132,27 +132,27 @@ async def get_item_autosearch(souvenir: bool, stattrak: bool, knife: bool):
 
                 current_skin_souvenir, current_skin_stattrak, current_skin_knife = is_skin_supported(name)
                 if current_skin_souvenir and not souvenir:
-                    logger.info(f"Предмет {name} пропущен, т.к. является Souvenir")
+                    logger.info(get_message("skins_manager", "get_item_autosearch_skip_souvenir", name))
                     return None, item_nameid
 
                 if current_skin_stattrak and not stattrak:
-                    logger.info(f"Предмет {name} пропущен, т.к. является StatTrak™")
+                    logger.info(get_message("skins_manager", "get_item_autosearch_skip_stattrak", name))
                     return None, item_nameid
 
                 if current_skin_knife and not knife:
-                    logger.info(f"Предмет {name} пропущен, т.к. является Knife")
+                    logger.info(get_message("skins_manager", "get_item_autosearch_skip_knife", name))
                     return None, item_nameid
 
-                logger.info(f"Выбран item: name={name}, item_nameid={item_nameid}")
+                logger.info(get_message("skins_manager", "get_item_autosearch_selected",  name, item_nameid))
                 return name, item_nameid
             else:
-                logger.info(f"Строка с rowid={last_rowid} не найдена, сбрасываем на начало")
+                logger.info(get_message("skins_manager", "get_item_autosearch_row_not_found", last_rowid))
                 await reset_search_state()
                 await conn.commit()
 
                 return None,None
     except aiosqlite.Error as e:
-        logger.error(f"Ошибка получения скина из БД скинов: {e}")
+        logger.error(get_message("skins_manager", "get_item_autosearch_db_error", str(e)))
         return None,None
 
 async def get_max_rows() -> int | None:
@@ -162,11 +162,11 @@ async def get_max_rows() -> int | None:
             await cursor.execute("SELECT MAX(rowid) FROM items")
             max_rows = await cursor.fetchone()
             if max_rows is None:
-                logger.warning("Таблица скинов пуста")
+                logger.warning(get_message("skins_manager", "get_max_rows_empty_table"))
                 return None
             return max_rows[0]
     except aiosqlite.Error as e:
-        logger.error(f"Ошибка БД скинов: {e}")
+        logger.error(get_message("skins_manager", "get_max_rows_db_error", str(e)))
         return None
 
 async def reset_max_rows():
@@ -175,9 +175,9 @@ async def reset_max_rows():
             cursor = await conn.cursor()
             await cursor.execute("UPDATE search_state SET last_rowid = ?", (1,))
             await conn.commit()
-            logger.debug(f"last_rowid присвоено 1")
+            logger.debug(get_message("skins_manager", "reset_max_rows_success"))
     except aiosqlite.Error as e:
-        logger.error(f"Ошибка БД с индексом последнего скина: {e}")
+        logger.error(get_message("skins_manager", "reset_max_rows_db_error", str(e)))
         return
 
 async def get_current_row() -> int | None:
@@ -187,11 +187,11 @@ async def get_current_row() -> int | None:
             await cursor.execute("SELECT last_rowid FROM search_state")
             current_row = await cursor.fetchone()
             if current_row is None:
-                logger.warning("Таблица с индексом последнего скина пуста")
+                logger.warning(get_message("skins_manager", "get_current_row_empty_table"))
                 return None
             return current_row[0]
     except aiosqlite.Error as e:
-        logger.error(f"Ошибка БД с индексом последнего скина: {e}")
+        logger.error(get_message("skins_manager", "get_current_row_db_error", str(e)))
         return None
 
 async def decrement_current_row():
@@ -202,13 +202,13 @@ async def decrement_current_row():
             result = await cursor.fetchone()
             current_row = result[0]
             if current_row <= 1:
-                logger.warning("last_rowid уже минимален (1), декремент невозможен")
+                logger.warning(get_message("skins_manager", "decrement_current_row_minimal"))
             new_rowid = current_row - 1
             await cursor.execute("UPDATE search_state SET last_rowid = ?", (new_rowid,))
             await conn.commit()
-            logger.debug(f"last_rowid уменьшен с {current_row} до {new_rowid}")
+            logger.debug(get_message("skins_manager", "decrement_current_row_success", current_row, new_rowid))
     except aiosqlite.Error as e:
-        logger.error(f"Ошибка БД с индексом последнего скина: {e}")
+        logger.error(get_message("skins_manager", "decrement_current_row_db_error", str(e)))
 
 async def get_item_results(query: str):
     try:
@@ -221,7 +221,7 @@ async def get_item_results(query: str):
             results = await cursor.fetchall()
             return results
     except aiosqlite.Error as e:
-        logger.error(f"Ошибка БД скинов: {e}")
+        logger.error(get_message("skins_manager", "get_item_results_db_error", str(e)))
         return None
 
 async def update_skins():
