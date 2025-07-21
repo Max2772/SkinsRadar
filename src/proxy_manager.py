@@ -1,16 +1,17 @@
 from typing import Optional
 import aiosqlite
 import os
-import asyncio
-from datetime import datetime, timedelta
+from datetime import datetime
 from zoneinfo import ZoneInfo
-from src.logger import logger
+from httpx_socks import AsyncProxyTransport
+from src.logger import logger, get_message
+import httpx
+from httpx import ProxyError
+import aiofiles
+from tqdm.asyncio import tqdm
 
 DB_PATH = os.path.join("data", "SkinsRadar.db")
 table_name = "proxies"
-DELETE_PROXY_INTERVAL = 120 # In minutes
-UPDATE_PROXY_INTERVAL = 120 # In Seconds
-UPDATE_PROXY_CYCLE = 5 # In seconds
 
 async def proxies_table_exits() -> bool:
     try:
@@ -40,7 +41,7 @@ async def init_proxies_db() -> None:
     except aiosqlite.Error as e:
         logger.error(f"Ошибка инициализации БД прокси: {e}")
 
-async def add_proxies_db(proxies: list) -> None:
+async def add_proxies_db(proxies: list[str]) -> None:
     try:
         async with aiosqlite.connect(DB_PATH) as conn:
             cursor = await conn.cursor()
@@ -57,27 +58,22 @@ async def add_proxies_db(proxies: list) -> None:
     except aiosqlite.Error as e:
         logger.error(f"Ошибка обновлении БД прокси: {e}")
 
-async def delete_old_proxies() -> None:
+async def wipe_all_proxies() -> None:
     try:
         async with aiosqlite.connect(DB_PATH) as conn:
             cursor = await conn.cursor()
-            proxy_age = (datetime.now(ZoneInfo("UTC")) - timedelta(minutes=DELETE_PROXY_INTERVAL)).strftime("%Y-%m-%d %H:%M:%S")
-            await cursor.execute("DELETE FROM proxies WHERE added_at < ?", (proxy_age,))
+            await cursor.execute("DELETE FROM proxies")
             await conn.commit()
-            logger.info(f"Удалено {cursor.rowcount} прокси старше {DELETE_PROXY_INTERVAL} минут")
+            logger.info("Все прокси удалены из БД")
     except aiosqlite.Error as e:
-        logger.error(f"Ошибка удаления старых прокси из БД: {e}")
+        logger.error(f"Ошибка обновлении БД прокси: {e}")
 
-async def update_proxies() -> None:
-    logger.info("Запуск обновления прокси")
+async def update_proxies(working_proxies: list[str]) -> None:
     await init_proxies_db()
-    proxies = await find_proxies()
-    if not proxies:
+    if not working_proxies:
         logger.warning("Не найдено новых прокси 🥺")
-        return
-    await add_proxies_db(proxies)
-    await delete_old_proxies()
-    logger.info("Прокси обновлены")
+    else:
+        await add_proxies_db(working_proxies)
 
 async def is_proxies_db_empty() -> bool:
     try:
@@ -107,18 +103,38 @@ async def get_random_proxy() -> Optional[str]:
         logger.error(f"Ошибка получения прокси из БД: {e}")
         return None
 
-async def run_periodic_update(stop_event: asyncio.Event = None) -> None:
-    await init_proxies_db()
-    logger.info("Запущено периодическое обновление прокси")
-    last_run = asyncio.get_event_loop().time()
+async def check_proxy(proxy: str, timeout: int = 5) -> bool:
+    try:
+        if proxy.startswith(("http://", "https://")):
+            return False
+        transport = AsyncProxyTransport.from_url(proxy, verify=False)
+        async with httpx.AsyncClient(transport=transport, timeout=timeout, verify=False) as client:
+            response = await client.get("https://api.ipify.org")
+            return response.status_code == 200
+    except (ProxyError, TimeoutError):
+        return False
 
-    while not(stop_event and stop_event.is_set()):
-        current_time = asyncio.get_event_loop().time()
-        if current_time - last_run >= UPDATE_PROXY_INTERVAL:
-            await update_proxies()
-            last_run = current_time
-        await asyncio.sleep(UPDATE_PROXY_CYCLE)
+async def extract_proxies(file_path: str) -> list[str]:
+    try:
+        async with aiofiles.open(file_path, "r", encoding="utf-8") as stream:
+            all_proxies = []
+            async for line in stream:
+                all_proxies.append(line.strip())
 
-async def find_proxies() -> list[str]:
-    # TODO
-    return None
+            working_proxies = []
+            tasks = [check_proxy(proxy) for proxy in all_proxies]
+            results = await tqdm.gather(*tasks, desc=f"Проверка прокси в {file_path}", unit="proxy")
+            for proxy, is_working in zip(all_proxies, results):
+                if is_working:
+                    working_proxies.append(proxy)
+                else:
+                    logger.debug(f"Прокси {proxy} не прошел проверку")
+
+            logger.info(f"Найдено {len(all_proxies)} прокси, рабочих {len(working_proxies)}")
+            return working_proxies
+    except FileNotFoundError:
+        logger.error(f"Файл {file_path} не найден")
+        return []
+    except Exception as e:
+        logger.error(f"Ошибка при чтении файла {file_path}: {str(e)}")
+        return []

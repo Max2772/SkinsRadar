@@ -4,7 +4,7 @@ import aiosqlite
 import os
 
 from src.utils import is_skin_supported
-from src.logger import logger
+from src.logger import logger, get_message
 
 DB_PATH = os.path.join("data", "SkinsRadar.db")
 

@@ -16,7 +16,7 @@ from src import (
     clean_price, extract_stickers_info, extract_keychain_info, extract_history_prices, is_skin_boosted,
     get_random_proxy, is_proxies_db_empty,
     get_item_nameid, get_item_autosearch, get_full_skin_name_nameid,
-    logger
+    logger, get_message
 )
 from src.utils import split_item_name, get_total_sales
 
@@ -48,51 +48,51 @@ async def get_autobuy_data(client: httpx.AsyncClient, item_nameid: str, currency
     url = f"https://steamcommunity.com/market/itemordershistogram?norender=1&country=NL&language=english&currency={currency}&item_nameid={item_nameid}&two_factor=0"
     try:
         response = await client.get(url)
-        logger.info(f"Запрос на {url}")
+        logger.info(get_message("main","get_autobuy_data_try_request", url))
         if response.status_code == 200:
-            logger.info(f"Успешный запрос на {url}")
+            logger.info(get_message("main", "get_autobuy_data_success_response", url))
             return response.json()
         else:
-            logger.warning(f"Ошибка HTTP {response.status_code} для {url}")
+            logger.warning(get_message("main","get_autobuy_data_http_error", response.status_code, url))
             global current_client
             current_client = None
             return None
     except httpx.HTTPStatusError as e:
-        logger.warning(f"HTTP ошибка при получении данных из histogram: {e}")
+        logger.warning(get_message("main", "get_autobuy_data_http_status_error", e))
         return None
     except httpx.RequestError as e:
-        logger.warning(f"Сетевая ошибка при получении данных из histogram: {e}")
+        logger.warning(get_message("main", "get_autobuy_data_request_error", e))
         return None
     except (ProxyError, ProxyTimeoutError) as e:
-        logger.warning(f"Ошибка прокси при получении данных из histogram: {e}")
+        logger.warning(get_message("main", "get_autobuy_data_proxy_error", e))
         current_client = None
         return None
 
-async def get_history_data(client: httpx.AsyncClient, full_skin_name: str, skip_boosted: bool, max_boost: float) -> str | None:
+async def get_history_data(client: httpx.AsyncClient, full_skin_name: str, skip_boosted: bool, max_boost: float) -> str | int | None:
     url = f"https://steamcommunity.com/market/listings/730/{full_skin_name}"
     try:
         response = await client.get(url)
-        logger.info(f"Запрос на {url}")
+        logger.info(get_message("main","get_history_data_try_request", url))
         if response.status_code == 200:
-            logger.info(f"Успешный запрос на {url}")
+            logger.info(get_message("main", "get_history_data_success_response", url))
             history_data = extract_history_prices(response.text)
             if skip_boosted and is_skin_boosted(history_data, max_boost):
-                logger.info("Предмет пропущен т.к. забущен")
+                logger.info(get_message("main", "get_history_data_skip_boosted"))
                 return -2
             return history_data
         else:
-            logger.warning(f"Ошибка HTTP {response.status_code} для {url}")
+            logger.warning(get_message("main","get_history_data_http_error", response.status_code, url))
             global current_client
             current_client = None
             return None
     except httpx.HTTPStatusError as e:
-        logger.warning(f"HTTP ошибка при получении данных из history: {e}")
+        logger.warning(get_message("main", "get_history_data_http_status_error", e))
         return None
     except httpx.RequestError as e:
-        logger.warning(f"Сетевая ошибка при получении данных из history: {e}")
+        logger.warning(get_message("main", "get_history_data_request_error", e))
         return None
     except (ProxyError, ProxyTimeoutError) as e:
-        logger.warning(f"Ошибка прокси при получении данных из history: {e}")
+        logger.warning(get_message("main", "get_history_data_proxy_error", e))
         current_client = None
         return None
 

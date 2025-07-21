@@ -8,6 +8,7 @@ def create_settings_view(
     commission_field,
     boost_field,
     proxy_button,
+    wipe_proxy_button,
     update_skins_db_button,
     app_bar
 ) -> ft.View:
@@ -34,9 +35,18 @@ def create_settings_view(
                                     content_padding=ft.padding.only(left=16, right=16, top=10, bottom=10)
                                 ),
                                 ft.ListTile(
-                                    title=ft.Text("Update Proxy", size=16, weight=ft.FontWeight.BOLD),
-                                    subtitle=ft.Text("Refresh proxy settings to improve connection reliability.", size=14, color=ft.Colors.GREY_600),
-                                    trailing=proxy_button
+                                    title=ft.Text("Update Proxies", size=16, weight=ft.FontWeight.BOLD),
+                                    subtitle=ft.Text("Refresh proxy list to improve connection reliability.",
+                                                     size=14, color=ft.Colors.GREY_600),
+                                    trailing=proxy_button,
+                                    content_padding=ft.padding.only(left=16, right=16, top=10, bottom=10)
+                                ),
+                                ft.ListTile(
+                                    title=ft.Text("Wipe Proxy", size=16, weight=ft.FontWeight.BOLD),
+                                    subtitle=ft.Text("Wipe all proxies from database.",
+                                                     size=14, color=ft.Colors.GREY_600),
+                                    trailing=wipe_proxy_button,
+                                    content_padding=ft.padding.only(left=16, right=16, top=10, bottom=10)
                                 ),
                                 ft.ListTile(
                                     title=ft.Text("Update Skins Database", size=16, weight=ft.FontWeight.BOLD),

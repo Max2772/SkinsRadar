@@ -1,5 +1,5 @@
 import json
-from src.logger import logger
+from src.logger import logger, get_message
 
 STEAM_CURRENCIES_PATH = "data/steam_currencies.json"
 

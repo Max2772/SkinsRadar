@@ -1,7 +1,10 @@
 import logging
 from logging.handlers import RotatingFileHandler
+from src.log_messages import MAIN_MESSAGES, HANDLERS_MESSAGES
+import os
 
 LOG_LEVEL = "INFO"
+LANGUAGE = os.getenv("LOG_LANGUAGE", "en")
 
 LOG_LEVEL_MAPPING = {
     "DEBUG": logging.DEBUG,
@@ -12,6 +15,14 @@ LOG_LEVEL_MAPPING = {
     "FATAL": logging.CRITICAL,
     "CRITICAL": logging.CRITICAL,
 }
+
+LOG_MESSAGES = {
+    "main": MAIN_MESSAGES,
+    "handlers": HANDLERS_MESSAGES
+}
+
+def get_message(module: str, key: str, *args) -> str:
+    return LOG_MESSAGES[module][LANGUAGE][key].format(*args)
 
 def setup_logger():
     log_level = LOG_LEVEL_MAPPING.get(LOG_LEVEL, logging.INFO)

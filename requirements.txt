@@ -1,4 +1,6 @@
 httpx==0.28.1
+aiofiles==24.1.0
+tqdm==4.67.1
 aiosqlite==0.21.0
 fuzzywuzzy==0.18.0
 flet==0.28.3

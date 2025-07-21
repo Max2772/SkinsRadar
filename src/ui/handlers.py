@@ -1,13 +1,13 @@
 import flet as ft
 from flet import Text, ListTile, Colors
 
-from src.proxy_manager import update_proxies
+from src.proxy_manager import update_proxies, wipe_all_proxies, is_proxies_db_empty
 from src.skins_manager import update_skins, get_item_results, get_max_rows, get_current_row, decrement_current_row, reset_max_rows
 from src.utils import split_item_name, check_exterior
 from fuzzywuzzy import fuzz
 from src.ui.data_table import create_skins_table_datatable, create_auto_table_datatable
-from src.logger import logger
-from src.proxy_manager import run_periodic_update
+from src.logger import logger, get_message
+from src.proxy_manager import extract_proxies
 import asyncio
 
 async def reload_skins_table(page: ft.Page, fetch_data_callback=None):
@@ -137,20 +137,6 @@ def validate_sales_amount(e):
     finally:
         e.page.update()
 
-async def on_proxy_button_click(e):
-    proxy_button = e.page.data["proxy_button"]
-    proxy_button.disabled = True
-    proxy_button.text = "Updating Proxies..."
-    e.page.update()
-    try:
-        await update_proxies()
-    except Exception as ex:
-        logger.warning(f"Ошибка обновления прокси: {ex}")
-    finally:
-        proxy_button.disabled = False
-        proxy_button.text = "Update Proxy"
-        e.page.update()
-
 async def on_update_skins_db_button_click(e):
     update_skins_db_button = e.page.data["update_skin_db_button"]
     update_skins_db_button.disabled = True
@@ -165,6 +151,21 @@ async def on_update_skins_db_button_click(e):
         update_skins_db_button.text = "Update Skins Database"
         e.page.update()
 
+async def on_wipe_proxies_db_button_click(e):
+            if not await is_proxies_db_empty():
+                wipe_proxy_button = e.page.data["wipe_proxy_button"]
+                wipe_proxy_button.disabled = True
+                wipe_proxy_button.text = "Delete all proxies..."
+                e.page.update()
+                try:
+                    await wipe_all_proxies()
+                except Exception as ex:
+                    logger.warning(f"Ошибка удаления прокси: {ex}")
+                finally:
+                    wipe_proxy_button.disabled = False
+                    wipe_proxy_button.text = "Wipe Proxies Database"
+                    e.page.update()
+
 def on_dropdown_exterior_change(e):
     if e.control.value == "No Exterior":
         e.page.data["current_exterior"] = None
@@ -178,7 +179,7 @@ def on_dropdown_currency_change(e):
     logger.info(f"Валюта изменена на {e.control.value}")
     e.page.update()
 
-def on_validate_input_field(e) -> float:
+def on_validate_input_field(e):
     try:
         amount = float(e.control.value)
         if amount < 0 or amount > 100:
@@ -224,11 +225,7 @@ async def start_parsing(page: ft.Page):
         return
 
     page.data["is_auto_parsing"] = True
-    logger.info("Radar Mode запущен")
-
-    stop_event = asyncio.Event()
-    page.data["proxy_stop_event"] = stop_event
-    page.run_task(run_periodic_update, stop_event)
+    logger.info(get_message("handlers", "start_radar_moode"))
 
     auto_table_container = page.data["auto_table_container"]
 
@@ -288,18 +285,10 @@ async def start_parsing(page: ft.Page):
 
 async def pause_auto_parsing(page: ft.Page):
     page.data["is_auto_parsing"] = False
-
-    if page.data["proxy_stop_event"]:
-        page.data["proxy_stop_event"].set()
-        await asyncio.sleep(0.2)
-        page.data["proxy_stop_event"] = None
-        logger.info("Обновление прокси остановлено")
-
     logger.info("Radar Mode приостановлен")
     page.update()
 
 async def clean_auto_table(page: ft.Page):
-    await pause_auto_parsing(page)
     auto_table_container = page.data["auto_table_container"]
     if auto_table_container and isinstance(auto_table_container.content, ft.DataTable):
         auto_table_container.content.rows.clear()
@@ -325,3 +314,30 @@ def on_skin_type_checkbox_change(e, text: str):
         logger.info(f"{text} скины добавлены в Radar Mode")
     else:
         logger.info(f"{text} скины убраны из Radar Mode")
+
+async def on_files_picked_proxy_button(e: ft.FilePickerResultEvent):
+    proxy_button = e.page.data["proxy_button"]
+    status_text = proxy_button.controls[1] if isinstance(proxy_button.controls[1], ft.Text) else None
+    if not status_text:
+        return
+    status_text.value = ""
+
+    try:
+        if e.files:
+            all_working_proxies = []
+            for file in e.files:
+                file_path = file.path
+                try:
+                    all_working_proxies += await extract_proxies(file_path)
+                except Exception as ex:
+                    logger.error(f"Ошибка при загрузке прокси из файла {file_path}: {str(ex)}")
+                    status_text.value = f"Ошибка в файле {file_path}: {str(ex)}"
+            await update_proxies(all_working_proxies)
+        else:
+            logger.warning("Файл не выбран")
+            status_text.value = "Файл не выбран"
+    except Exception as ex:
+        logger.warning(f"Ошибка обновления прокси: {ex}")
+        status_text.value = f"Ошибка: {str(ex)}"
+    finally:
+        e.page.update()

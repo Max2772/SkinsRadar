@@ -1,6 +1,6 @@
 import flet as ft
 from flet import SearchBar, Container, Column, ElevatedButton, TextField, Colors, Icons
-from src.ui.handlers import handle_search_suggestions, on_proxy_button_click, on_update_skins_db_button_click, validate_listings_amount, validate_profit_amount, validate_sales_amount, on_dropdown_exterior_change, on_dropdown_currency_change, on_validate_input_field, on_save_input_field, on_toggle_theme, on_skin_type_checkbox_change
+from src.ui.handlers import handle_search_suggestions, on_update_skins_db_button_click, validate_listings_amount, validate_profit_amount, validate_sales_amount, on_dropdown_exterior_change, on_dropdown_currency_change, on_validate_input_field, on_save_input_field, on_toggle_theme, on_skin_type_checkbox_change, on_wipe_proxies_db_button_click
 
 def create_search_bar_result() -> ft.Container:
     return Container(
@@ -17,12 +17,32 @@ def create_search_bar() -> ft.SearchBar:
         on_change=handle_search_suggestions
     )
 
-def create_proxy_button() -> ft.ElevatedButton:
-    return ElevatedButton(
+def create_proxy_button(file_picker: ft.FilePicker) -> ft.Column:
+    proxy_button = ElevatedButton(
         text="Update Proxy",
         icon=Icons.VPN_LOCK,
         style=ft.ButtonStyle(bgcolor=ft.Colors.BLUE_600, color=ft.Colors.WHITE),
-        on_click=on_proxy_button_click
+        on_click=lambda e: file_picker.pick_files(
+            allow_multiple=True,
+            allowed_extensions=["txt"],
+            dialog_title="Выберите файл с прокси"
+        )
+    )
+
+    status_text = ft.Text(
+        value="",
+        color=ft.Colors.RED,
+        weight=ft.FontWeight.W_500
+    )
+
+    return ft.Column(
+        controls=[
+            proxy_button,
+            status_text
+        ],
+        spacing=5,
+        alignment=ft.MainAxisAlignment.CENTER,
+        horizontal_alignment=ft.CrossAxisAlignment.CENTER
     )
 
 def create_update_skins_db_button() -> ft.ElevatedButton:
@@ -31,6 +51,14 @@ def create_update_skins_db_button() -> ft.ElevatedButton:
         icon=Icons.DATASET_OUTLINED,
         style=ft.ButtonStyle(bgcolor=ft.Colors.BLACK87, color=ft.Colors.WHITE),
         on_click=on_update_skins_db_button_click
+    )
+
+def create_wipe_proxies_db_button() -> ft.ElevatedButton:
+    return ElevatedButton(
+        text="Wipe Proxies Database",
+        icon=Icons.DELETE_FOREVER,
+        style=ft.ButtonStyle(bgcolor=ft.Colors.RED, color=ft.Colors.WHITE),
+        on_click=on_wipe_proxies_db_button_click
     )
 
 def create_listings_amount_field(default_query: int) -> ft.TextField:

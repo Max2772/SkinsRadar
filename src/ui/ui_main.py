@@ -6,6 +6,7 @@ from src.ui.ui_components import (
     create_search_bar,
     create_search_bar_result,
     create_proxy_button,
+    create_wipe_proxies_db_button,
     create_update_skins_db_button,
     create_listings_amount_field,
     create_profit_amount_field,
@@ -20,9 +21,9 @@ from src.ui.ui_components import (
     create_auto_table_container,
     create_skin_type_checkbox
 )
-
 from src.ui.views import create_skins_table_view, create_settings_view, create_auto_table_view
 from src.currencies import load_currencies
+from src.ui.handlers import on_files_picked_proxy_button
 
 DEFAULT_SKIN = None
 DEFAULT_AMOUNT_QUERY = 10
@@ -38,11 +39,14 @@ async def main(page: ft.Page, fetch_data_callback=None):
     page.theme_mode = ft.ThemeMode.SYSTEM
 
     page.add(create_splash_screen(page))
+    file_picker = ft.FilePicker(on_result=on_files_picked_proxy_button)
+    page.overlay.append(file_picker)
     page.update()
 
     search_bar_result = create_search_bar_result()
     search_bar = create_search_bar()
-    proxy_button = create_proxy_button()
+    proxy_button = create_proxy_button(file_picker)
+    wipe_proxy_button = create_wipe_proxies_db_button()
     update_skins_db_button = create_update_skins_db_button()
     listings_amount_field = create_listings_amount_field(DEFAULT_AMOUNT_QUERY)
     profit_amount_field = create_profit_amount_field(DEFAULT_AMOUNT_PROFIT)
@@ -75,6 +79,7 @@ async def main(page: ft.Page, fetch_data_callback=None):
         "dropdown_exterior": dropdown_exterior,
         "table_container": table_container,
         "proxy_button": proxy_button,
+        "wipe_proxy_button": wipe_proxy_button,
         "update_skin_db_button": update_skins_db_button,
         "fetch_data_callback": fetch_data_callback,
         "data_skins_table": [],
@@ -86,7 +91,7 @@ async def main(page: ft.Page, fetch_data_callback=None):
         "stattrak_checkbox": stattrak_checkbox,
         "knife_checkbox": knife_checkbox,
         "skip_boosted_checkbox": skip_boosted_checkbox,
-        "proxy_stop_event": None
+        "file_picker": file_picker
     }
 
     # Needs to be initialized after page.data
@@ -109,6 +114,7 @@ async def main(page: ft.Page, fetch_data_callback=None):
         commission_field,
         boost_field,
         proxy_button,
+        wipe_proxy_button,
         update_skins_db_button,
         app_bar
     )
