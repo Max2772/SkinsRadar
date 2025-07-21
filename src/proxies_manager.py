@@ -21,7 +21,7 @@ async def proxies_table_exits() -> bool:
             result = await cursor.fetchone()
             return result is not None
     except aiosqlite.Error as e:
-        logger.error(f"Ошибка БД прокси: {e}")
+        logger.error(get_message("proxies_manager", "proxies_table_exits_db_error", str(e)))
         return False
 
 async def init_proxies_db() -> None:
@@ -37,9 +37,9 @@ async def init_proxies_db() -> None:
                         )
                     """)
             await conn.commit()
-            logger.info(f"БД инициализирована: {DB_PATH}")
+            logger.info(get_message("proxies_manager", "init_proxies_db_success", DB_PATH))
     except aiosqlite.Error as e:
-        logger.error(f"Ошибка инициализации БД прокси: {e}")
+        logger.error(get_message("proxies_manager", "init_proxies_db_error", str(e)))
 
 async def add_proxies_db(proxies: list[str]) -> None:
     try:
@@ -54,9 +54,9 @@ async def add_proxies_db(proxies: list[str]) -> None:
                 )
                 total_inserted += cursor.rowcount
             await conn.commit()
-            logger.info(f"Добавлено {total_inserted} новых прокси")
+            logger.info(get_message("proxies_manager", "add_proxies_db_success", total_inserted))
     except aiosqlite.Error as e:
-        logger.error(f"Ошибка обновлении БД прокси: {e}")
+        logger.error(get_message("proxies_manager", "add_proxies_db_error", str(e)))
 
 async def wipe_all_proxies() -> None:
     try:
@@ -64,14 +64,14 @@ async def wipe_all_proxies() -> None:
             cursor = await conn.cursor()
             await cursor.execute("DELETE FROM proxies")
             await conn.commit()
-            logger.info("Все прокси удалены из БД")
+            logger.info(get_message("proxies_manager", "wipe_all_proxies_success"))
     except aiosqlite.Error as e:
-        logger.error(f"Ошибка обновлении БД прокси: {e}")
+        logger.error(get_message("proxies_manager", "wipe_all_proxies_error", str(e)))
 
 async def update_proxies(working_proxies: list[str]) -> None:
     await init_proxies_db()
     if not working_proxies:
-        logger.warning("Не найдено новых прокси 🥺")
+        logger.warning(get_message("proxies_manager", "update_proxies_no_new_proxies"))
     else:
         await add_proxies_db(working_proxies)
 
@@ -84,7 +84,7 @@ async def is_proxies_db_empty() -> bool:
             count = result[0] if result else None
             return count == 0
     except aiosqlite.Error as e:
-        logger.error(f"Ошибка БД прокси: {e}")
+        logger.error(get_message("proxies_manager", "is_proxies_db_empty_error", str(e)))
         return False
 
 async def get_random_proxy() -> Optional[str]:
@@ -94,13 +94,13 @@ async def get_random_proxy() -> Optional[str]:
             await cursor.execute("SELECT proxy FROM proxies ORDER BY RANDOM() LIMIT 1")
             result = await cursor.fetchone()
             if result:
-                logger.info(f"Выбран случайный прокси: {result[0]}")
+                logger.info(get_message("proxies_manager", "get_random_proxy_selected", result[0]))
                 return result[0]
             else:
-                logger.warning("Рабочие прокси не найдены в БД")
+                logger.warning(get_message("proxies_manager", "get_random_proxy_not_found"))
                 return None
     except aiosqlite.Error as e:
-        logger.error(f"Ошибка получения прокси из БД: {e}")
+        logger.error(get_message("proxies_manager", "get_random_proxy_db_error", str(e)))
         return None
 
 async def check_proxy(proxy: str, timeout: int = 5) -> bool:
@@ -123,18 +123,18 @@ async def extract_proxies(file_path: str) -> list[str]:
 
             working_proxies = []
             tasks = [check_proxy(proxy) for proxy in all_proxies]
-            results = await tqdm.gather(*tasks, desc=f"Проверка прокси в {file_path}", unit="proxy")
+            results = await tqdm.gather(*tasks, desc=get_message("proxies_manager", "extract_proxies_checking", file_path), unit="proxy")
             for proxy, is_working in zip(all_proxies, results):
                 if is_working:
                     working_proxies.append(proxy)
                 else:
-                    logger.debug(f"Прокси {proxy} не прошел проверку")
+                    logger.debug(get_message("proxies_manager", "extract_proxies_proxy_failed", proxy))
 
-            logger.info(f"Найдено {len(all_proxies)} прокси, рабочих {len(working_proxies)}")
+            logger.info(get_message("proxies_manager", "extract_proxies_summary", len(all_proxies), len(working_proxies)))
             return working_proxies
     except FileNotFoundError:
-        logger.error(f"Файл {file_path} не найден")
+        logger.error(get_message("proxies_manager", "extract_proxies_file_not_found", file_path))
         return []
     except Exception as e:
-        logger.error(f"Ошибка при чтении файла {file_path}: {str(e)}")
+        logger.error(get_message("proxies_manager", "extract_proxies_general_error", file_path, str(e)))
         return []

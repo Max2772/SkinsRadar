@@ -8,10 +8,10 @@ def load_currencies():
         with open(STEAM_CURRENCIES_PATH, "r", encoding="utf-8") as f:
             return json.load(f)
     except FileNotFoundError:
-        logger.info("Файл steam_currencies.json не найден")
+        logger.info(get_message("currencies", "load_currencies_file_not_found"))
         return []
     except json.JSONDecodeError:
-        logger.info("Ошибка кодировки steam_currencies.json")
+        logger.info(get_message("currencies", "load_currencies_decode_error"))
         return []
 
 def get_currency_by_code(steam_code: int):

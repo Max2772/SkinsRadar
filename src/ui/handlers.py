@@ -1,13 +1,13 @@
 import flet as ft
 from flet import Text, ListTile, Colors
 
-from src.proxy_manager import update_proxies, wipe_all_proxies, is_proxies_db_empty
+from src.proxies_manager import update_proxies, wipe_all_proxies, is_proxies_db_empty
 from src.skins_manager import update_skins, get_item_results, get_max_rows, get_current_row, decrement_current_row, reset_max_rows
 from src.utils import split_item_name, check_exterior
 from fuzzywuzzy import fuzz
 from src.ui.data_table import create_skins_table_datatable, create_auto_table_datatable
 from src.logger import logger, get_message
-from src.proxy_manager import extract_proxies
+from src.proxies_manager import extract_proxies
 import asyncio
 
 async def reload_skins_table(page: ft.Page, fetch_data_callback=None):
@@ -24,7 +24,7 @@ async def reload_skins_table(page: ft.Page, fetch_data_callback=None):
     except Exception as e:
         table_container.content = ft.Column([Text(f"Error loading data: {str(e)}", color=Colors.RED),  ft.ProgressRing()],
                                             horizontal_alignment=ft.CrossAxisAlignment.CENTER)
-        logger.warning(f"Ошибка загрузки данных в reload_skins_table: {str(e)}")
+        logger.warning(get_message("handlers", "reload_skins_table_error", str(e)))
         page.update()
         await asyncio.sleep(1)
         await reload_skins_table(page, fetch_data_callback=fetch_data_callback)
@@ -145,7 +145,7 @@ async def on_update_skins_db_button_click(e):
     try:
         await update_skins()
     except Exception as ex:
-        logger.warning(f"Ошибка обновления скинов: {ex}")
+        logger.warning(get_message("handlers", "on_update_skins_db_button_click_error", str(ex)))
     finally:
         update_skins_db_button.disabled = False
         update_skins_db_button.text = "Update Skins Database"
@@ -160,7 +160,7 @@ async def on_wipe_proxies_db_button_click(e):
                 try:
                     await wipe_all_proxies()
                 except Exception as ex:
-                    logger.warning(f"Ошибка удаления прокси: {ex}")
+                    logger.warning(get_message("handlers", "on_wipe_proxies_db_button_click_error", str(ex)))
                 finally:
                     wipe_proxy_button.disabled = False
                     wipe_proxy_button.text = "Wipe Proxies Database"
@@ -171,13 +171,25 @@ def on_dropdown_exterior_change(e):
         e.page.data["current_exterior"] = None
     else:
         e.page.data["current_exterior"] = e.control.value
-    logger.info(f"Exterior изменен на {e.control.value}")
+    logger.info(get_message("handlers", "on_dropdown_exterior_change_success", e.control.value))
     e.page.update()
 
 def on_dropdown_currency_change(e):
     e.page.data["currency"] = e.control.value
-    logger.info(f"Валюта изменена на {e.control.value}")
+    logger.info(get_message("handlers", "on_dropdown_currency_change_success", e.control.value))
     e.page.update()
+
+
+
+
+
+
+
+
+
+
+
+
 
 def on_validate_input_field(e):
     try:
@@ -200,7 +212,7 @@ def on_save_input_field(e, status_text: ft.Text, page_parametr_str: str):
         amount = on_validate_input_field(e)
 
         e.page.data[page_parametr_str] = amount
-        logger.info(f"{page_parametr_str} изменен на {amount}%")
+        logger.info(get_message("handlers", "on_save_input_field_success", page_parametr_str, amount))
         e.control.value = ""
     except ValueError:
         e.control.error_text = "Incorrect character"
@@ -210,7 +222,7 @@ def on_save_input_field(e, status_text: ft.Text, page_parametr_str: str):
 
 def on_toggle_theme(e):
     e.page.theme_mode = ft.ThemeMode.DARK if e.page.theme_mode == ft.ThemeMode.LIGHT else ft.ThemeMode.LIGHT
-    logger.info(f"Изменен цвет темы на {e.page.theme_mode}")
+    logger.info(get_message("handlers", "on_toggle_theme_success", e.page.theme_mode))
     e.page.update()
 
 #######################################  AUTO TABLE UI HANDLERS  #######################################
@@ -225,7 +237,7 @@ async def start_parsing(page: ft.Page):
         return
 
     page.data["is_auto_parsing"] = True
-    logger.info(get_message("handlers", "start_radar_moode"))
+    logger.info(get_message("handlers", "start_parsing_start"))
 
     auto_table_container = page.data["auto_table_container"]
 
@@ -254,20 +266,20 @@ async def start_parsing(page: ft.Page):
             auto_table_container.content = original_content
 
             if new_row == -1:
-                logger.info("Предмет не добавлен в AutoTable из-за фильтрации")
+                logger.info(get_message("handlers", "start_parsing_item_filtered"))
             elif new_row == -2:
-                logger.info("Предмет не добавлен в AutoTable т.к. забущен")
+                logger.info(get_message("handlers", "start_parsing_item_boosted"))
             elif new_row:
                 auto_table_container.content.rows.append(new_row)
-                logger.info(f"Добавлена новая строка в AutoTable")
+                logger.info(get_message("handlers", "start_parsing_row_added"))
                 page.data["data_auto_table"].append(page.data["new_data_auto_table"])
                 page.update()
             else:
-                logger.warning(f"Не удалось создать строку для AutoTable")
+                logger.warning(get_message("handlers", "start_parsing_row_failed"))
                 if await get_current_row() > 1:
                     await decrement_current_row()
         except Exception as e:
-            logger.warning(f"Ошибка загрузки данных: {str(e)}")
+            logger.warning(get_message("handlers", "start_parsing_error", str(e)))
             auto_table_container.content = ft.Column(
                 controls=[original_content, ft.Text(f"Error loading data: {str(e)}", color=ft.Colors.RED)],
                 alignment=ft.MainAxisAlignment.CENTER,
@@ -278,14 +290,14 @@ async def start_parsing(page: ft.Page):
             continue
         finally:
             if await get_current_row() > await get_max_rows():
-                logger.info("Поиск в AutoTable завершен")
+                logger.info(get_message("handlers", "start_parsing_completed"))
                 await pause_auto_parsing(page)
                 break
         await asyncio.sleep(1)
 
 async def pause_auto_parsing(page: ft.Page):
     page.data["is_auto_parsing"] = False
-    logger.info("Radar Mode приостановлен")
+    logger.info(get_message("handlers", "pause_auto_parsing_success"))
     page.update()
 
 async def clean_auto_table(page: ft.Page):
@@ -294,7 +306,7 @@ async def clean_auto_table(page: ft.Page):
         auto_table_container.content.rows.clear()
         page.data["data_auto_table"] = []
 
-    logger.info("Auto таблица очищена и приостановлена")
+    logger.info(get_message("handlers", "clean_auto_table_success"))
     page.update()
 
 def is_souvenir_supported(page: ft.Page) -> bool:
@@ -311,9 +323,9 @@ def is_skip_boosted_supported(page: ft.Page) -> bool:
 
 def on_skin_type_checkbox_change(e, text: str):
     if e.control.value:
-        logger.info(f"{text} скины добавлены в Radar Mode")
+        logger.info(get_message("handlers", "on_skin_type_checkbox_change_enabled", text))
     else:
-        logger.info(f"{text} скины убраны из Radar Mode")
+        logger.info(get_message("handlers", "on_skin_type_checkbox_change_disabled", text))
 
 async def on_files_picked_proxy_button(e: ft.FilePickerResultEvent):
     proxy_button = e.page.data["proxy_button"]
@@ -330,14 +342,14 @@ async def on_files_picked_proxy_button(e: ft.FilePickerResultEvent):
                 try:
                     all_working_proxies += await extract_proxies(file_path)
                 except Exception as ex:
-                    logger.error(f"Ошибка при загрузке прокси из файла {file_path}: {str(ex)}")
-                    status_text.value = f"Ошибка в файле {file_path}: {str(ex)}"
+                    logger.error(get_message("handlers", "on_files_picked_proxy_button_file_error", file_path, str(ex)))
+                    status_text.value = get_message("handlers", "on_files_picked_proxy_button_file_error")
             await update_proxies(all_working_proxies)
         else:
-            logger.warning("Файл не выбран")
-            status_text.value = "Файл не выбран"
+            logger.warning(get_message("handlers", "on_files_picked_proxy_button_no_file"))
+            status_text.value = get_message("handlers", "on_files_picked_proxy_button_no_file")
     except Exception as ex:
-        logger.warning(f"Ошибка обновления прокси: {ex}")
-        status_text.value = f"Ошибка: {str(ex)}"
+        logger.warning(get_message("handlers", "on_files_picked_proxy_button_error", str(ex)))
+        status_text.value = get_message("handlers", "on_files_picked_proxy_button_error", str(ex))
     finally:
         e.page.update()

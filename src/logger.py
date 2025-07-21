@@ -1,6 +1,6 @@
 import logging
 from logging.handlers import RotatingFileHandler
-from src.log_messages import MAIN_MESSAGES, HANDLERS_MESSAGES, UTILS_MESSAGES, SKINS_MANAGER_MESSAGES
+from src.log_messages import MAIN_MESSAGES, UTILS_MESSAGES, SKINS_MANAGER_MESSAGES, PROXY_MANAGER_MESSAGES, CURRENCIES_MESSAGES, HANDLERS_MESSAGES
 import os
 
 LOG_LEVEL = "INFO"
@@ -20,6 +20,8 @@ LOG_MESSAGES = {
     "main": MAIN_MESSAGES,
     "utils": UTILS_MESSAGES,
     "skins_manager": SKINS_MANAGER_MESSAGES,
+    "proxies_manager": PROXY_MANAGER_MESSAGES,
+    "currencies": CURRENCIES_MESSAGES,
     "handlers": HANDLERS_MESSAGES
 }
 

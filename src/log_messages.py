@@ -227,29 +227,181 @@ SKINS_MANAGER_MESSAGES = {
     }
 }
 
+PROXY_MANAGER_MESSAGES = {
+    "en": {
+        # proxies_table_exits
+        "proxies_table_exits_db_error": "Proxy database error: {}",
 
+        # init_proxies_db
+        "init_proxies_db_success": "Database initialized: {}",
+        "init_proxies_db_error": "Error initializing proxy database: {}",
 
+        # add_proxies_db
+        "add_proxies_db_success": "Added {} new proxies",
+        "add_proxies_db_error": "Error updating proxy database: {}",
 
+        # wipe_all_proxies
+        "wipe_all_proxies_success": "All proxies deleted from database",
+        "wipe_all_proxies_error": "Error updating proxy database: {}",
 
+        # update_proxies
+        "update_proxies_no_new_proxies": "No new proxies found",
 
+        # is_proxies_db_empty
+        "is_proxies_db_empty_error": "Proxy database error: {}",
 
+        # get_random_proxy
+        "get_random_proxy_selected": "Selected random proxy: {}",
+        "get_random_proxy_not_found": "No working proxies found in database",
+        "get_random_proxy_db_error": "Error retrieving proxy from database: {}",
 
+        # extract_proxies
+        "extract_proxies_checking": "Checking proxies in {}",
+        "extract_proxies_proxy_failed": "Proxy {} failed check",
+        "extract_proxies_summary": "Found {} proxies, {} working",
+        "extract_proxies_file_not_found": "File {} not found",
+        "extract_proxies_general_error": "Error reading file {}: {}",
+    },
+    "ru": {
+        # proxies_table_exits
+        "proxies_table_exits_db_error": "Ошибка БД прокси: {}",
 
+        # init_proxies_db
+        "init_proxies_db_success": "БД инициализирована: {}",
+        "init_proxies_db_error": "Ошибка инициализации БД прокси: {}",
 
+        # add_proxies_db
+        "add_proxies_db_success": "Добавлено {} новых прокси",
+        "add_proxies_db_error": "Ошибка обновления БД прокси: {}",
 
+        # wipe_all_proxies
+        "wipe_all_proxies_success": "Все прокси удалены из БД",
+        "wipe_all_proxies_error": "Ошибка обновления БД прокси: {}",
 
+        # update_proxies
+        "update_proxies_no_new_proxies": "Не найдено новых прокси",
 
+        # is_proxies_db_empty
+        "is_proxies_db_empty_error": "Ошибка БД прокси: {}",
 
+        # get_random_proxy
+        "get_random_proxy_selected": "Выбран случайный прокси: {}",
+        "get_random_proxy_not_found": "Рабочие прокси не найдены в БД",
+        "get_random_proxy_db_error": "Ошибка получения прокси из БД: {}",
 
+        # extract_proxies
+        "extract_proxies_checking": "Проверка прокси в {}",
+        "extract_proxies_proxy_failed": "Прокси {} не прошел проверку",
+        "extract_proxies_summary": "Найдено {} прокси, рабочих {}",
+        "extract_proxies_file_not_found": "Файл {} не найден",
+        "extract_proxies_general_error": "Ошибка при чтении файла {}: {}",
+    }
+}
 
-
+CURRENCIES_MESSAGES = {
+    "en": {
+        # load_currencies
+        "load_currencies_file_not_found": "File steam_currencies.json not found",
+        "load_currencies_decode_error": "Error decoding steam_currencies.json",
+    },
+    "ru": {
+        # load_currencies
+        "load_currencies_file_not_found": "Файл steam_currencies.json не найден",
+        "load_currencies_decode_error": "Ошибка кодировки steam_currencies.json",
+    }
+}
 
 HANDLERS_MESSAGES = {
     "en": {
-        "start_radar_moode": "Radar Mode started",
+        # reload_skins_table
+        "reload_skins_table_error": "Error loading data in reload_skins_table: {}",
 
+        # on_update_skins_db_button_click
+        "on_update_skins_db_button_click_error": "Error updating skins: {}",
+
+        # on_wipe_proxies_db_button_click
+        "on_wipe_proxies_db_button_click_error": "Error deleting proxies: {}",
+
+        # on_dropdown_exterior_change
+        "on_dropdown_exterior_change_success": "Exterior changed to {}",
+
+        # on_dropdown_currency_change
+        "on_dropdown_currency_change_success": "Currency changed to {}",
+
+        # on_save_input_field
+        "on_save_input_field_success": "{} changed to {}%",
+
+        # on_toggle_theme
+        "on_toggle_theme_success": "Theme color changed to {}",
+
+        # start_parsing
+        "start_parsing_start": "Radar Mode started",
+        "start_parsing_item_filtered": "Item not added to AutoTable due to filtering",
+        "start_parsing_item_boosted": "Item not added to AutoTable because it is boosted",
+        "start_parsing_row_added": "New row added to AutoTable",
+        "start_parsing_row_failed": "Failed to create row for AutoTable",
+        "start_parsing_error": "Error loading data: {}",
+        "start_parsing_completed": "Search in AutoTable completed",
+
+        # pause_auto_parsing
+        "pause_auto_parsing_success": "Radar Mode paused",
+
+        # clean_auto_table
+        "clean_auto_table_success": "Auto table cleared and paused",
+
+        # on_skin_type_checkbox_change
+        "on_skin_type_checkbox_change_enabled": "{} skins added to Radar Mode",
+        "on_skin_type_checkbox_change_disabled": "{} skins removed from Radar Mode",
+
+        # on_files_picked_proxy_button
+        "on_files_picked_proxy_button_file_error": "Error loading proxies from file {}: {}",
+        "on_files_picked_proxy_button_no_file": "No file selected",
+        "on_files_picked_proxy_button_error": "Error updating proxies: {}",
     },
     "ru": {
-        "start_radar_moode": "Radar Mode запущен",
+        # reload_skins_table
+        "reload_skins_table_error": "Ошибка загрузки данных в reload_skins_table: {}",
+
+        # on_update_skins_db_button_click
+        "on_update_skins_db_button_click_error": "Ошибка обновления скинов: {}",
+
+        # on_wipe_proxies_db_button_click
+        "on_wipe_proxies_db_button_click_error": "Ошибка удаления прокси: {}",
+
+        # on_dropdown_exterior_change
+        "on_dropdown_exterior_change_success": "Exterior изменен на {}",
+
+        # on_dropdown_currency_change
+        "on_dropdown_currency_change_success": "Валюта изменена на {}",
+
+        # on_save_input_field
+        "on_save_input_field_success": "{} изменен на {}%",
+
+        # on_toggle_theme
+        "on_toggle_theme_success": "Изменен цвет темы на {}",
+
+        # start_parsing
+        "start_parsing_start": "Radar Mode запущен",
+        "start_parsing_item_filtered": "Предмет не добавлен в AutoTable из-за фильтрации",
+        "start_parsing_item_boosted": "Предмет не добавлен в AutoTable т.к. забущен",
+        "start_parsing_row_added": "Добавлена новая строка в AutoTable",
+        "start_parsing_row_failed": "Не удалось создать строку для AutoTable",
+        "start_parsing_error": "Ошибка загрузки данных: {}",
+        "start_parsing_completed": "Поиск в AutoTable завершен",
+
+        # pause_auto_parsing
+        "pause_auto_parsing_success": "Radar Mode приостановлен",
+
+        # clean_auto_table
+        "clean_auto_table_success": "Auto таблица очищена и приостановлена",
+
+        # on_skin_type_checkbox_change
+        "on_skin_type_checkbox_change_enabled": "{} скины добавлены в Radar Mode",
+        "on_skin_type_checkbox_change_disabled": "{} скины убраны из Radar Mode",
+
+        # on_files_picked_proxy_button
+        "on_files_picked_proxy_button_file_error": "Ошибка при загрузке прокси из файла {}: {}",
+        "on_files_picked_proxy_button_no_file": "Файл не выбран",
+        "on_files_picked_proxy_button_error": "Ошибка обновления прокси: {}",
     }
 }
