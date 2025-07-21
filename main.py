@@ -99,16 +99,16 @@ async def get_history_data(client: httpx.AsyncClient, full_skin_name: str, skip_
 async def fetch_market_data(client: httpx.AsyncClient, url_market: str, full_skin_name: str, currency: int, has_exterior: bool) -> Dict[str, Any]:
     try:
         global current_client
-        logger.info(f"Запрос на {url_market}")
+        logger.info(get_message("main", "fetch_market_data_try_request", url_market))
         response = await client.get(url_market)
         if response.status_code == 200:
-            logger.info(f"Успешный запрос на {url_market}")
+            logger.info(get_message("main", "fetch_market_data_success_response", url_market))
             result = {"market_data": response.json()}
         elif response.status_code == 404:
-            logger.warning(f"Скин {full_skin_name} не найден")
+            logger.warning(get_message("main", "fetch_market_item_not_found", full_skin_name))
             return {"market_data": None}
         else:
-            logger.warning(f"Ошибка HTTP {response.status_code} для {full_skin_name}")
+            logger.warning(get_message("main", "fetch_market_http_error", response.status_code, full_skin_name))
             current_client = None
             return {"market_data": None}
 
@@ -124,7 +124,7 @@ async def fetch_market_data(client: httpx.AsyncClient, url_market: str, full_ski
 
         return result
     except (httpx.RequestError, httpx.ProxyError) as e:
-        logger.warning(f"Сетевая ошибка для {full_skin_name}: {e}")
+        logger.warning(get_message("main", "fetch_market_request_error", full_skin_name, e))
         current_client = None
         return {"market_data": None, "item_nameid": None, "autobuy_data": None, "has_exterior": None}
 
@@ -188,19 +188,19 @@ async def process_autobuy_json_to_data(data) -> float:
     global current_client
     if not data:
         current_client = None
-        logger.warning("JSON или пуст или success == False для запроса по автопокупке")
+        logger.warning(get_message("main", "process_autobuy_json_to_data_json_unsuccessful"))
         return 0.0
     try:
         return clean_price(data.get("buy_order_price", "0"))
     except (KeyError, TypeError, AttributeError) as e:
-        logger.warning(f"Ошибка обработки JSON: {e}")
+        logger.warning(get_message("main", "process_autobuy_json_to_data_key_error", e))
         return 0.0
 
 async def process_autosearch_json_to_data(json_data, fee: float, needed_profit: float, needed_sales: int):
     if not json_data.get("market_data") or not json_data.get("history_data"):
         global current_client
         current_client =  None
-        logger.warning("success == false или JSON пуст в process_autosearch_json_to_data")
+        logger.warning(get_message("main", "process_autosearch_json_to_data_json_unsuccessful"))
         return []
     try:
         market_data = json_data["market_data"]
@@ -209,10 +209,10 @@ async def process_autosearch_json_to_data(json_data, fee: float, needed_profit: 
         autobuy_price = clean_price(market_data.get("buy_order_price"))
         selling_price = clean_price(market_data.get("sell_order_price"))
         if autobuy_price is None:
-            logger.info("Никто не покупает данный предмет(Параметр sell_order_price == None)")
+            logger.info(get_message("main", "process_autosearch_json_to_data_no_buyers"))
             return -1
         if selling_price is None:
-            logger.info("Никто не продает данный предмет(Параметр buy_order_price == None)")
+            logger.info(get_message("main", "process_autosearch_json_to_data_no_sellers"))
             return -1
 
         if autobuy_price < 0.16 and fee == 13: # Steam hidden 0.02$ fee (Only for RadarMode as USD is the main and only currency)
@@ -223,12 +223,12 @@ async def process_autosearch_json_to_data(json_data, fee: float, needed_profit: 
             profit_percent = (selling_price * (1 - fee / 100) / autobuy_price - 1) * 100
 
         if profit_percent < needed_profit:
-            logger.info(f"Разность {profit_percent}% < {needed_profit}% предмет пропущен")
+            logger.info(get_message("main", "process_autosearch_json_to_data_less_profit", profit_percent, needed_profit))
             return -1
 
         total_sales_month = get_total_sales(history_data)
         if total_sales_month < needed_sales:
-            logger.info(f"Продаж {total_sales_month} < {needed_sales} предмет пропущен")
+            logger.info(get_message("main", "process_autosearch_json_to_data_less_sales", total_sales_month, needed_sales))
             return -1
 
         item_nameid = json_data["item_nameid"]
@@ -251,21 +251,21 @@ async def process_autosearch_json_to_data(json_data, fee: float, needed_profit: 
         }
 
     except (KeyError, TypeError, AttributeError) as e:
-        logger.warning(f"Ошибка обработки JSON: {e}")
+        logger.warning(get_message("main", "process_autosearch_json_to_data_key_error", e))
         return []
 
 async def process_main_json_to_data(json_data, needed_amount: int, currency: int, fee: float):
     if not json_data:
         global current_client
         current_client =  None
-        logger.warning("JSON или пуст в process_main_json_to_data")
+        logger.warning(get_message("main", "process_main_json_to_data_json_unsuccessful"))
         return []
     try:
         autobuy_price = await process_autobuy_json_to_data(json_data.get("autobuy_data"))
         item_nameid = json_data.get("item_nameid", "Не найдено")
 
         if autobuy_price is None:
-            logger.info("Параметр buy_order_price равняется null")
+            logger.info(get_message("main", "process_main_json_to_data_no_buyers"))
             return []
 
         processed_data = []
@@ -273,7 +273,7 @@ async def process_main_json_to_data(json_data, needed_amount: int, currency: int
 
         assets_check = json_data.get("market_data")
         if "assets" not in assets_check or not isinstance(assets_check["assets"], dict):
-            logger.info(f"Предмет({item_nameid}) не продается на торговой площадке")
+            logger.info(get_message("main", "process_main_json_to_data_item_not_listed", item_nameid))
             return []
         assets = assets_check.get("assets", {}).get("730", {}).get("2", {})
 
@@ -343,7 +343,7 @@ async def process_main_json_to_data(json_data, needed_amount: int, currency: int
 
         return processed_data
     except (KeyError, TypeError, AttributeError) as e:
-        logger.warning(f"Ошибка обработки JSON: {e}")
+        logger.warning(get_message("main", "process_main_json_to_data_key_error", str(e)))
         return []
 
 async def fetch_and_process(currency = None, quality = None, amount = None, skin_str = None, steam_fee = None, profit = None, sales = None, souvenir = False, stattrak = False, knife = False, skip_boosted = False, boost_percentage = None, mode="DEFAULT"):
@@ -361,7 +361,7 @@ async def fetch_and_process(currency = None, quality = None, amount = None, skin
             return json_data.get("market_data")
         elif not json_data:
             skin_logger_name = skin_str if skin_str else json_data.get("item_nameid", "(Предмет не найден)")
-            logger.warning(f"Ошибка: данные для {skin_logger_name} не получены")
+            logger.warning(get_message("main", "fetch_and_process_data_not_retrieved",skin_logger_name))
             return None
 
         if mode == "RANDOM":
