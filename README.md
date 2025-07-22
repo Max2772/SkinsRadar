@@ -1,4 +1,5 @@
 # SkinsRadar
+## [➡ Russian ReadMe](docs/RuREADME.md)
 
 <img src="assets/icon_white.png" alt="SkinsRadar Logo" width="200"/>
 <img src="https://img.shields.io/badge/python-3.12-blue.svg" alt="Python" />
@@ -124,41 +125,32 @@ SkinsRadar provides detailed logging for debugging and monitoring. Below are exa
 
 #### Browser Mode Logs
 ```log
-2025-07-22 16:00:10,809 - [MainProcess] INFO - main.fetch_market_data:103 - Request for https://steamcommunity.com/market/listings/730/AK-47%20%7C%20Asiimov%20(Minimal Wear)/render?start=0&count=10&currency=1&format=json
-2025-07-22 16:00:16,354 - [MainProcess] INFO - main.fetch_market_data:106 - Successful response from https://steamcommunity.com/market/listings/730/AK-47%20%7C%20Asiimov%20(Minimal Wear)/render?start=0&count=10&currency=1&format=json
-2025-07-22 16:00:17,104 - [MainProcess] INFO - main.get_autobuy_data:52 - Request for https://steamcommunity.com/market/itemordershistogram?norender=1&country=NL&language=english&currency=1&item_nameid=176024804&two_factor=0
-2025-07-22 16:00:17,104 - [MainProcess] INFO - main.get_autobuy_data:54 - Successful response for https://steamcommunity.com/market/itemordershistogram?norender=1&country=NL&language=english&currency=1&item_nameid=176024804&two_factor=0
+2025-07-22 16:16:18,598 - [MainProcess] INFO - Selected random proxy: socks4://98.188.47.150:4145
+2025-07-22 16:16:18,599 - [MainProcess] INFO - Request for https://steamcommunity.com/market/listings/730/AK-47%20%7C%20Asiimov%20(Minimal Wear)/render?start=0&count=10&currency=1&format=json
+2025-07-22 16:16:20,685 - [MainProcess] INFO - Successful response from https://steamcommunity.com/market/listings/730/AK-47%20%7C%20Asiimov%20(Minimal Wear)/render?start=0&count=10&currency=1&format=json
+2025-07-22 16:16:21,462 - [MainProcess] INFO - Request for https://steamcommunity.com/market/itemordershistogram?norender=1&country=NL&language=english&currency=1&item_nameid=176024804&two_factor=0
+2025-07-22 16:16:21,462 - [MainProcess] INFO - Successful response for https://steamcommunity.com/market/itemordershistogram?norender=1&country=NL&language=english&currency=1&item_nameid=176024804&two_factor=0
 ```
 
 #### Radar Mode Logs
 ```log
-2025-07-22 16:03:23,022 - [MainProcess] INFO - handlers.start_parsing:242 - Radar Mode started
-2025-07-22 16:03:23,026 - [MainProcess] INFO - proxies_manager.get_random_proxy:102 - Selected random proxy: socks4://98.175.31.195:4145
-2025-07-22 16:03:23,033 - [MainProcess] INFO - skins_manager.get_item_autosearch:147 - Selected item: name=AK-47 | Baroque Purple (Minimal Wear), item_nameid=176096521
-2025-07-22 16:03:24,804 - [MainProcess] INFO - main.get_autobuy_data:52 - Request for https://steamcommunity.com/market/itemordershistogram?norender=1&country=NL&language=english&currency=1&item_nameid=176096521&two_factor=0
-2025-07-22 16:03:24,804 - [MainProcess] INFO - main.get_autobuy_data:54 - Successful response for https://steamcommunity.com/market/itemordershistogram?norender=1&country=NL&language=english&currency=1&item_nameid=176096521&two_factor=0
-2025-07-22 16:03:26,027 - [MainProcess] INFO - main.get_history_data:76
-
- - Request for https://steamcommunity.com/market/listings/730/AK-47 | Baroque Purple (Minimal Wear)
-2025-07-22 16:03:26,027 - [MainProcess] INFO - main.get_history_data:78 - Successful response for https://steamcommunity.com/market/listings/730/AK-47 | Baroque Purple (Minimal Wear)
-2025-07-22 16:03:26,032 - [MainProcess] INFO - main
-.get_history_data:81 - Item skipped because boosted
-2025-07-22 16:03:26,032 - [MainProcess] INFO - handlers.start_parsing:273 - Item not added to AutoTable because it is boosted
-2025-07-22 16:03:27,042 - [MainProcess] INFO - skins_manager.get_item_autosearch:147 - Selected item: name=AK-47 | Baroque Purple (Well-Worn), item_nameid=176096413
-2025-07-22 16:03:27,790 - [MainProcess] INFO - main.get_autobuy_data:52 - Request for https://steamcommunity.com/market/itemordershistogram?norender=1&country=NL&language=english&currency=1&item_nameid=176096413&two_factor=0
-2025-07-22 16:03:27,790 - [MainProcess] INFO - main.get_autobuy_data:54 - Successful response for https://steamcommunity.com/market/itemordershistogram?norender=1&country=NL&language=english&currency=1&item_nameid=176096413&two_factor=0
-2025-07-22 16:03:28,875 - [MainProcess] INFO - main.get_history_data:76 - Request for https://steamcommunity.com/market/listings/730/AK-47 | Baroque Purple (Well-Worn)
-2025-07-22 16:03:28,875 - [MainProcess] INFO - main.get_history_data:78 - Successful response for https://steamcommunity.com/market/listings/730/AK-47 | Baroque Purple (Well-Worn)
-2025-07-22 16:03:28,878 - [MainProcess] INFO - main.process_autosearch_json_to_data:227 - Difference -12.535380507343131% < 5.0% item skipped
-2025-07-22 16:03:28,879 - [MainProcess] INFO - handlers.start_parsing:271 - Item not added to AutoTable due to filtering
-2025-07-22 16:03:29,882 - [MainProcess] INFO - skins_manager.get_item_autosearch:147 - Selected item: name=AK-47 | Black Laminate (Battle-Scarred), item_nameid=1321650
-2025-07-22 16:03:30,653 - [MainProcess] INFO - main.get_autobuy_data:52 - Request for https://steamcommunity.com/market/itemordershistogram?norender=1&country=NL&language=english&currency=1&item_nameid=1321650&two_factor=0
-2025-07-22 16:03:30,654 - [MainProcess] INFO - main.get_autobuy_data:54 - Successful response for https://steamcommunity.com/market/itemordershistogram?norender=1&country=NL&language=english&currency=1&item_nameid=1321650&two_factor=0
-2025-07-22 16:03:32,060 - [MainProcess] INFO - main.get_history_data:76 - Request for https://steamcommunity.com/market/listings/730/AK-47 | Black Laminate (Battle-Scarred)
-2025-07-22 16:03:32,060 - [MainProcess] INFO - main.get_history_data:78 - Successful response for https://steamcommunity.com/market/listings/730/AK-47 | Black Laminate (Battle-Scarred)
-2025-07-22 16:03:32,066 - [MainProcess] INFO - handlers.start_parsing:276 - New row added to AutoTable
-2025-07-22 16:03:33,082 - [MainProcess] INFO - skins_manager.get_item_autosearch:147 - Selected item: name=AK-47 | Black Laminate (Factory New), item_nameid=1340331
-2025-07-22 16:03:33,450 - [MainProcess] INFO - handlers.pause_auto_parsing:302 - Radar Mode paused
+2025-07-22 16:16:41,113 - [MainProcess] INFO - Radar Mode started
+2025-07-22 16:16:41,125 - [MainProcess] INFO - Selected item: name=AK-47 | Black Laminate (Field-Tested), item_nameid=1321767
+2025-07-22 16:16:43,059 - [MainProcess] INFO - Request for https://steamcommunity.com/market/itemordershistogram?norender=1&country=NL&language=english&currency=1&item_nameid=1321767&two_factor=0
+2025-07-22 16:16:43,059 - [MainProcess] INFO - Successful response for https://steamcommunity.com/market/itemordershistogram?norender=1&country=NL&language=english&currency=1&item_nameid=1321767&two_factor=0
+2025-07-22 16:16:44,230 - [MainProcess] INFO - Request for https://steamcommunity.com/market/listings/730/AK-47 | Black Laminate (Field-Tested)
+2025-07-22 16:16:44,230 - [MainProcess] INFO - Successful response for https://steamcommunity.com/market/listings/730/AK-47 | Black Laminate (Field-Tested)
+2025-07-22 16:16:44,235 - [MainProcess] INFO - Difference -9.6775590551181% < 5.0% item skipped
+2025-07-22 16:16:44,235 - [MainProcess] INFO - Item not added to AutoTable due to filtering
+2025-07-22 16:16:45,267 - [MainProcess] INFO - Selected item: name=AK-47 | Black Laminate (Minimal Wear), item_nameid=1321591
+2025-07-22 16:16:46,157 - [MainProcess] INFO - Request for https://steamcommunity.com/market/itemordershistogram?norender=1&country=NL&language=english&currency=1&item_nameid=1321591&two_factor=0
+2025-07-22 16:16:46,157 - [MainProcess] INFO - Successful response for https://steamcommunity.com/market/itemordershistogram?norender=1&country=NL&language=english&currency=1&item_nameid=1321591&two_factor=0
+2025-07-22 16:16:47,282 - [MainProcess] INFO - Request for https://steamcommunity.com/market/listings/730/AK-47 | Black Laminate (Minimal Wear)
+2025-07-22 16:16:47,283 - [MainProcess] INFO - Successful response for https://steamcommunity.com/market/listings/730/AK-47 | Black Laminate (Minimal Wear)
+2025-07-22 16:16:47,286 - [MainProcess] INFO - Item skipped because boosted
+2025-07-22 16:16:47,286 - [MainProcess] INFO - Item not added to AutoTable because it is boosted
+2025-07-22 16:16:48,299 - [MainProcess] INFO - Selected item: name=AK-47 | Black Laminate (Well-Worn), item_nameid=1322161
+2025-07-22 16:16:48,837 - [MainProcess] INFO - Radar Mode paused
 ```
 
 ## 📜 License
