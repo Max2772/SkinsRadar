@@ -1,5 +1,5 @@
 # SkinsRadar
-## [➡ Russian ReadMe](../../README.md)
+## [➡ Russian ReadMe](docs/RuREADME.md)
 
 <img src="assets/icon_white.png" alt="SkinsRadar Logo" width="200"/>
 <img src="https://img.shields.io/badge/python-3.12-blue.svg" alt="Python" />
