@@ -106,7 +106,7 @@ See `requirements.txt` for the full list.
 ## 📸 Screenshots and Logs
 
 ### Screenshots 🖼️
-Below are placeholders for the main windows of SkinsRadar. Replace these with actual screenshots by updating the image paths.
+Below are placeholders for the main windows of SkinsRadar.
 
 - **Browser Mode**:
   ![Browser Mode](assets/screenshots/browser_mode.png)
