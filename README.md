@@ -1,6 +1,6 @@
 # SkinsRadar 🕵️‍♂️
 
-![SkinsRadar Logo](assets/icon_black.png)  
+![SkinsRadar Logo](assets/icon_white.png)  
 ![Python](https://img.shields.io/badge/python-3.12-blue.svg)
 
 SkinsRadar is a powerful **CS2 skins monitoring tool** for [steamcommunity.com](https://steamcommunity.com) 🚀. It helps you track and analyze skin prices, bypass Steam's request limits using proxies, and find profitable deals for trading or other purposes. **No account registration or login required** 🔑—dive right in!
