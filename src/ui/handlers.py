@@ -346,7 +346,8 @@ async def on_files_picked_proxy_button(e: ft.FilePickerResultEvent):
                 except Exception as ex:
                     logger.error(get_message("handlers", "on_files_picked_proxy_button_file_error", file_path, str(ex)))
                     status_text.value = get_message("handlers", "on_files_picked_proxy_button_file_error")
-            await update_proxies(all_working_proxies)
+            inserted_amount = await update_proxies(all_working_proxies)
+            status_text.value = get_message("handlers", "on_files_picked_proxy_button_inserted_amount", inserted_amount)
         else:
             logger.warning(get_message("handlers", "on_files_picked_proxy_button_no_file"))
             status_text.value = get_message("handlers", "on_files_picked_proxy_button_no_file")

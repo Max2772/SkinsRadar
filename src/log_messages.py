@@ -355,6 +355,7 @@ HANDLERS_MESSAGES = {
 
         # on_files_picked_proxy_button
         "on_files_picked_proxy_button_file_error": "Error loading proxies from file {}: {}",
+        "on_files_picked_proxy_button_inserted_amount": "Added {} proxies",
         "on_files_picked_proxy_button_no_file": "No file selected",
         "on_files_picked_proxy_button_error": "Error updating proxies: {}",
     },
@@ -401,6 +402,7 @@ HANDLERS_MESSAGES = {
 
         # on_files_picked_proxy_button
         "on_files_picked_proxy_button_file_error": "Ошибка при загрузке прокси из файла {}: {}",
+        "on_files_picked_proxy_button_inserted_amount": "Добавлено {} прокси",
         "on_files_picked_proxy_button_no_file": "Файл не выбран",
         "on_files_picked_proxy_button_error": "Ошибка обновления прокси: {}",
     }

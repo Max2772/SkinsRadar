@@ -46,7 +46,7 @@ async def init_proxies_db() -> None:
     except aiosqlite.Error as e:
         logger.error(get_message("proxies_manager", "init_proxies_db_error", str(e)))
 
-async def add_proxies_db(proxies: list[str]) -> None:
+async def add_proxies_db(proxies: list[str]) -> int:
     try:
         async with aiosqlite.connect(DB_PATH) as conn:
             cursor = await conn.cursor()
@@ -60,8 +60,10 @@ async def add_proxies_db(proxies: list[str]) -> None:
                 total_inserted += cursor.rowcount
             await conn.commit()
             logger.info(get_message("proxies_manager", "add_proxies_db_success", total_inserted))
+            return total_inserted
     except aiosqlite.Error as e:
         logger.error(get_message("proxies_manager", "add_proxies_db_error", str(e)))
+        return 0
 
 async def wipe_all_proxies() -> None:
     try:
@@ -73,12 +75,14 @@ async def wipe_all_proxies() -> None:
     except aiosqlite.Error as e:
         logger.error(get_message("proxies_manager", "wipe_all_proxies_error", str(e)))
 
-async def update_proxies(working_proxies: list[str]) -> None:
+async def update_proxies(working_proxies: list[str]) -> int:
     await init_proxies_db()
     if not working_proxies:
         logger.warning(get_message("proxies_manager", "update_proxies_no_new_proxies"))
+        return 0
     else:
-        await add_proxies_db(working_proxies)
+        inserted_amount = await add_proxies_db(working_proxies)
+        return inserted_amount
 
 async def is_proxies_db_empty() -> bool:
     try:
