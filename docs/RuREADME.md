@@ -1,4 +1,4 @@
-# SkinsRadar 🕵️‍♂️
+# SkinsRadar
 ## [➡ English ReadMe](../README.md)
 
 <img src="../assets/icon_white.png" alt="SkinsRadar Logo" width="200"/>
@@ -68,6 +68,7 @@ SkinsRadar требует **Python 3.12** для оптимальной рабо
 - `tqdm==4.67.1`
 - `fuzzywuzzy==0.18.0`
 - `python-Levenshtein==0.27.1`
+- `tzdata==2025.2`
 
 Полный список см. в `requirements.txt`.
 
