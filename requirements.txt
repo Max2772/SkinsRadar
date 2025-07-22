@@ -6,3 +6,4 @@ fuzzywuzzy==0.18.0
 flet==0.28.3
 httpx_socks==0.10.1
 python-Levenshtein==0.27.1
+tzdata==2025.2
