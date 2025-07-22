@@ -168,7 +168,7 @@ def create_app_bar() -> ft.AppBar:
                             icon=ft.Icons.TABLE_CHART,
                             icon_color=Colors.WHITE,
                             opacity=0.8,
-                            tooltip="Surf Skins",
+                            tooltip="Browser Mode",
                             on_click=lambda e: e.page.go("/skins_table")
                         ),
                         ft.IconButton(
