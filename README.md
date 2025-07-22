@@ -69,6 +69,7 @@ SkinsRadar requires **Python 3.12** for optimal performance (other versions are 
 - `tqdm==4.67.1`
 - `fuzzywuzzy==0.18.0`
 - `python-Levenshtein==0.27.1`
+- `tzdata==2025.2`
 
 See `requirements.txt` for the full list.
 
