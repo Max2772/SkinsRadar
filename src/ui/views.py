@@ -90,6 +90,7 @@ def create_settings_view(
                 padding=ft.padding.only(bottom=20)
             )
         ],
+        scroll=ft.ScrollMode.AUTO,
         vertical_alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
         horizontal_alignment=ft.CrossAxisAlignment.CENTER
     )
