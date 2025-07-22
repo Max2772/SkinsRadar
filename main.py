@@ -396,8 +396,11 @@ def parse_arguments():
 
 if __name__ == "__main__":
     args = parse_arguments()
+
+    # If you want to set specific args for all runs then change them here rather than in logger.py
     set_log_level(args.log_level.upper())
     set_log_language(args.lang)
+
     logger = setup_logger()
     logger.info("Start Coroutine")
     asyncio.run((ft.app_async(target=app_main, assets_dir="assets")))

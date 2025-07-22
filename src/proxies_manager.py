@@ -1,3 +1,4 @@
+import re
 from typing import Optional
 import aiosqlite
 import os
@@ -13,6 +14,9 @@ from tqdm.asyncio import tqdm
 logger = get_logger()
 DB_PATH = os.path.join("data", "SkinsRadar.db")
 table_name = "proxies"
+
+
+PROXY_PATTERN = re.compile(r'^(socks4|socks5)://(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}):(\d{1,5})$')
 
 async def proxies_table_exits() -> bool:
     try:
@@ -120,7 +124,12 @@ async def extract_proxies(file_path: str) -> list[str]:
         async with aiofiles.open(file_path, "r", encoding="utf-8") as stream:
             all_proxies = []
             async for line in stream:
-                all_proxies.append(line.strip())
+                stripped_line = line.strip()
+                if not stripped_line:
+                    continue
+                if not PROXY_PATTERN.match(stripped_line):
+                    continue
+                all_proxies.append(stripped_line)
 
             working_proxies = []
             tasks = [check_proxy(proxy) for proxy in all_proxies]
