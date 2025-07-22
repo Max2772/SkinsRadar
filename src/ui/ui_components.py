@@ -168,14 +168,14 @@ def create_app_bar() -> ft.AppBar:
                             icon=ft.Icons.TABLE_CHART,
                             icon_color=Colors.WHITE,
                             opacity=0.8,
-                            tooltip="Skins Table",
+                            tooltip="Surf Skins",
                             on_click=lambda e: e.page.go("/skins_table")
                         ),
                         ft.IconButton(
                             icon=ft.Icons.AUTO_FIX_HIGH,
                             icon_color=Colors.WHITE,
                             opacity=0.8,
-                            tooltip="Auto Parsing",
+                            tooltip="Radar Mode",
                             on_click=lambda e: e.page.go("/auto_table")
                         ),
                         ft.IconButton(

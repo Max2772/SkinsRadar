@@ -61,7 +61,7 @@ async def main(page: ft.Page, fetch_data_callback=None):
     knife_checkbox = create_skin_type_checkbox("★ Knife | Gloves", True)
     skip_boosted_checkbox = create_skin_type_checkbox("🗲 Skip Boosted", True)
 
-    await asyncio.sleep(0) # Change to 0 when developing
+    await asyncio.sleep(0.5) # Change to 0 when developing
     page.controls.clear()
 
     page.data = {
