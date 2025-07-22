@@ -6,9 +6,11 @@ from src.skins_manager import update_skins, get_item_results, get_max_rows, get_
 from src.utils import split_item_name, check_exterior
 from fuzzywuzzy import fuzz
 from src.ui.data_table import create_skins_table_datatable, create_auto_table_datatable
-from src.logger import logger, get_message
+from src.logger import get_logger, get_message
 from src.proxies_manager import extract_proxies
 import asyncio
+
+logger = get_logger()
 
 async def reload_skins_table(page: ft.Page, fetch_data_callback=None):
     table_container = page.data["table_container"]

@@ -4,6 +4,7 @@ from httpx_socks import AsyncProxyTransport
 from python_socks import ProxyError, ProxyTimeoutError
 import flet as ft
 import urllib.parse
+import os
 from typing import Dict, Any
 from itertools import islice
 import argparse
@@ -16,7 +17,7 @@ from src import (
     clean_price, extract_stickers_info, extract_keychain_info, extract_history_prices, is_skin_boosted,
     get_random_proxy, is_proxies_db_empty,
     get_item_nameid, get_item_autosearch, get_full_skin_name_nameid,
-    logger, get_message
+    logger, get_message, set_log_level, set_log_language, setup_logger
 )
 from src.utils import split_item_name, get_total_sales
 
@@ -377,16 +378,26 @@ async def fetch_and_process(currency = None, quality = None, amount = None, skin
 async def app_main(page: ft.Page):
     await ui_main(page, fetch_data_callback=fetch_and_process)
 
+def parse_arguments():
+    parser = argparse.ArgumentParser(description="SkinRadar Logger Configuration")
+    parser.add_argument(
+        "--lang",
+        default=os.getenv("LOG_LANGUAGE", "en"),
+        choices=["en", "ru"],
+        help="Language for logs: ENGLISH - en, RUSSIAN - ru"
+    )
+    parser.add_argument(
+        "--log-level",
+        default=os.getenv("LOG_LEVEL", "INFO"),
+        choices=["DEBUG", "INFO", "WARNING", "WARN", "ERROR", "FATAL", "CRITICAL"],
+        help="Log levels: DEBUG, INFO, WARNING, WARN, ERROR, FATAL, CRITICAL"
+    )
+    return parser.parse_args()
+
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--log-level", type=str, default=None,
-                        help="Уровень логирования (DEBUG, INFO, WARNING, ERROR, CRITICAL)")
-
-    args = parser.parse_args()
-
-    if args.log_level:
-        log_level = args.log_level.upper()
-        logger.setLevel(log_level)
-
+    args = parse_arguments()
+    set_log_level(args.log_level.upper())
+    set_log_language(args.lang)
+    logger = setup_logger()
     logger.info("Start Coroutine")
     asyncio.run((ft.app_async(target=app_main, assets_dir="assets")))

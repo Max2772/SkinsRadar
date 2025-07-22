@@ -1,7 +1,9 @@
 import json
 import re
 from datetime import datetime, timedelta
-from src.logger import logger, get_message
+from src.logger import get_logger, get_message
+
+logger = get_logger()
 
 def split_item_name(full_skin_name: str) -> tuple[str, str]:
     pattern = r"^(.*?)(?:\s*\((Battle-Scarred|Factory New|Field-Tested|Minimal Wear|Well-Worn)\))?$"

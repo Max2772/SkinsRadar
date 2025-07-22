@@ -4,8 +4,9 @@ import aiosqlite
 import os
 
 from src.utils import is_skin_supported
-from src.logger import logger, get_message
+from src.logger import get_logger, get_message
 
+logger = get_logger()
 DB_PATH = os.path.join("data", "SkinsRadar.db")
 
 def fetch_and_process_skins():

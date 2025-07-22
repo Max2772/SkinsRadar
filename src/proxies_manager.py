@@ -4,12 +4,13 @@ import os
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from httpx_socks import AsyncProxyTransport
-from src.logger import logger, get_message
+from src.logger import get_logger, get_message
 import httpx
 from httpx import ProxyError
 import aiofiles
 from tqdm.asyncio import tqdm
 
+logger = get_logger()
 DB_PATH = os.path.join("data", "SkinsRadar.db")
 table_name = "proxies"
 

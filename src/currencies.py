@@ -1,6 +1,7 @@
 import json
-from src.logger import logger, get_message
+from src.logger import get_logger, get_message
 
+logger = get_logger()
 STEAM_CURRENCIES_PATH = "data/steam_currencies.json"
 
 def load_currencies():
