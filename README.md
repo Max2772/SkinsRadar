@@ -119,8 +119,6 @@ Below are placeholders for the main windows of SkinsRadar. Replace these with ac
   ![Settings](assets/screenshots/settings.png)
   *Customize Steam commission, proxy settings, database updates, and app theme.*
 
-> **Note**: To add screenshots, place the image files (e.g., `browser_mode.png`, `radar_mode.png`, `settings.png`) in the `assets/screenshots/` directory and update the paths above.
-
 ### Example Logs 📜
 SkinsRadar provides detailed logging for debugging and monitoring. Below are example logs for **Browser Mode** and **Radar Mode**.
 
