@@ -167,8 +167,6 @@ We welcome contributions! 🎉 To get started:
 4. Push to your fork (`git push origin feature/AmazingFeature`).
 5. Open a Pull Request.
 
-Please follow the coding style (use `black` and `flake8` for formatting and linting).
-
 ## 📬 Contact
 
 Have questions or suggestions? Reach out via:
