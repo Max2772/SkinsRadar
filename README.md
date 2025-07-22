@@ -154,6 +154,10 @@ SkinsRadar provides detailed logging for debugging and monitoring. Below are exa
 2025-07-22 16:16:48,837 - [MainProcess] INFO - Radar Mode paused
 ```
 
+## ⚠️ Disclaimer
+
+SkinsRadar has no affiliation with Steam, Valve, or the CS2 developers. It is an independent project created by a third party and is not supported, sponsored, or endorsed by Steam or Valve. Any issues related to Steam or CS2 should be addressed directly to Valve. You are responsible for ensuring that your use of SkinsRadar complies with all applicable laws and regulations. The developer does not encourage or endorse any illegal use of the software.
+
 ## 📜 License
 
 This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
