@@ -1,14 +1,16 @@
+from typing import Optional
+import asyncio
+from fuzzywuzzy import fuzz
+
 import flet as ft
 from flet import Text, ListTile, Colors
 
 from src.proxies_manager import update_proxies, wipe_all_proxies, is_proxies_db_empty
 from src.skins_manager import update_skins, get_item_results, get_max_rows, get_current_row, decrement_current_row, reset_max_rows
 from src.utils import split_item_name, check_exterior
-from fuzzywuzzy import fuzz
 from src.ui.data_table import create_skins_table_datatable, create_auto_table_datatable
 from src.logger import get_logger, get_message
 from src.proxies_manager import extract_proxies
-import asyncio
 
 logger = get_logger()
 
@@ -33,7 +35,7 @@ async def reload_skins_table(page: ft.Page, fetch_data_callback=None):
     finally:
         page.update()
 
-async def update_search_results(query: str) -> list | None:
+async def update_search_results(query: str) -> Optional[int]:
     if not query:
         return None
     search_results = []

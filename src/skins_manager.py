@@ -1,4 +1,5 @@
 import re
+from typing import Optional
 import httpx
 import aiosqlite
 import os
@@ -156,7 +157,7 @@ async def get_item_autosearch(souvenir: bool, stattrak: bool, knife: bool):
         logger.error(get_message("skins_manager", "get_item_autosearch_db_error", str(e)))
         return None,None
 
-async def get_max_rows() -> int | None:
+async def get_max_rows() -> Optional[list]:
     try:
         async with aiosqlite.connect(DB_PATH) as conn:
             cursor = await conn.cursor()
@@ -181,7 +182,7 @@ async def reset_max_rows():
         logger.error(get_message("skins_manager", "reset_max_rows_db_error", str(e)))
         return
 
-async def get_current_row() -> int | None:
+async def get_current_row() -> Optional[int]:
     try:
         async with aiosqlite.connect(DB_PATH) as conn:
             cursor = await conn.cursor()

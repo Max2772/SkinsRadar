@@ -5,7 +5,7 @@ from python_socks import ProxyError, ProxyTimeoutError
 import flet as ft
 import urllib.parse
 import os
-from typing import Dict, Any
+from typing import Dict, Any, Optional, Union
 from itertools import islice
 import argparse
 
@@ -45,7 +45,7 @@ async def create_client_with_proxy(proxy: str) -> httpx.AsyncClient:
         else:
             raise ValueError(f"Неподдерживаемый формат прокси: {proxy}")
 
-async def get_autobuy_data(client: httpx.AsyncClient, item_nameid: str, currency: int) -> str | None:
+async def get_autobuy_data(client: httpx.AsyncClient, item_nameid: str, currency: int) -> Optional[str]:
     url = f"https://steamcommunity.com/market/itemordershistogram?norender=1&country=NL&language=english&currency={currency}&item_nameid={item_nameid}&two_factor=0"
     try:
         response = await client.get(url)
@@ -69,7 +69,7 @@ async def get_autobuy_data(client: httpx.AsyncClient, item_nameid: str, currency
         current_client = None
         return None
 
-async def get_history_data(client: httpx.AsyncClient, full_skin_name: str, skip_boosted: bool, max_boost: float) -> str | int | None:
+async def get_history_data(client: httpx.AsyncClient, full_skin_name: str, skip_boosted: bool, max_boost: float) -> Union[str, int, None]:
     url = f"https://steamcommunity.com/market/listings/730/{full_skin_name}"
     try:
         response = await client.get(url)

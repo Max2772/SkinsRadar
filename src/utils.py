@@ -1,4 +1,5 @@
 import json
+from typing import Optional, Union
 import re
 from datetime import datetime, timedelta
 from src.logger import get_logger, get_message
@@ -16,7 +17,7 @@ def split_item_name(full_skin_name: str) -> tuple[str, str]:
     else:
         return full_skin_name, ""
 
-def clean_price(autobuy_price: str) -> float | None:
+def clean_price(autobuy_price: str) -> Optional[float]:
     if autobuy_price is None:
         return None
     if not isinstance(autobuy_price, str):
@@ -81,7 +82,7 @@ def extract_keychain_info(descriptions):
             return result
     return {"image_url": [], "keychain_title": [], "keychain_url": []}
 
-def extract_history_prices(html: str) -> list | None:
+def extract_history_prices(html: str) -> Optional[list]:
     pattern = r"var line1\s*=\s*(\[\[.*?\]\]);"
     match = re.search(pattern, html, re.DOTALL)
     if match:
@@ -127,8 +128,8 @@ def is_skin_boosted(history_data, max_boost: float) -> bool:
         return False
 
     # To remove debug later
-    logger.debug(f"AVG_SALES: {avg_sales}")
-    logger.debug(f"MIN_PRICE: {min_price}, MAX_PRICE: {max_price}")
+    # logger.debug(f"AVG_SALES: {avg_sales}")
+    # logger.debug(f"MIN_PRICE: {min_price}, MAX_PRICE: {max_price}")
 
     price_diff_percent = ((max_price - min_price) / min_price) * 100
     return price_diff_percent > max_boost

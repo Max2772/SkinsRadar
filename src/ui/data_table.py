@@ -46,10 +46,10 @@ async def create_skins_table_datatable(page: ft.Page, fetch_data_callback=None):
                                     border_radius=4,
                                 ),
                             ),
-                            DataCell(Text(f"{row["currency"]}{row["autobuy_price"]:.2f}")),
-                            DataCell(Text(f"{row["currency"]}{row["price"]:.2f}")),
-                            DataCell(Text(f"{row["currency"]}{row["profit"]:.2f}", color=Colors.RED_900 if row["profit"] < 0 else Colors.GREEN_900, weight=ft.FontWeight.BOLD)),
-                            DataCell(Text(f"{row["profit_percent"]:.2f}%", color=Colors.RED_900 if row["profit_percent"] < 0 else Colors.GREEN_900, weight=ft.FontWeight.BOLD)),
+                            DataCell(Text(f"{row['currency']}{row['autobuy_price']:.2f}")),
+                            DataCell(Text(f"{row['currency']}{row['price']:.2f}")),
+                            DataCell(Text(f"{row['currency']}{row['profit']:.2f}", color=Colors.RED_900 if row['profit'] < 0 else Colors.GREEN_900, weight=ft.FontWeight.BOLD)),
+                            DataCell(Text(f"{row['profit_percent']:.2f}%", color=Colors.RED_900 if row['profit_percent'] < 0 else Colors.GREEN_900, weight=ft.FontWeight.BOLD)),
                             DataCell(
                                 Row(
                                     controls=[
@@ -120,10 +120,10 @@ async def create_skins_table_datatable(page: ft.Page, fetch_data_callback=None):
                                     border_radius=4,
                                 ),
                             ),
-                            DataCell(Text(f"{row["currency"]}{row["autobuy_price"]:.2f}")),
-                            DataCell(Text(f"{row["currency"]}{row["price"]:.2f}")),
-                            DataCell(Text(f"{row["currency"]}{row["profit"]:.2f}", color=Colors.RED_900 if row["profit"] < 0 else Colors.GREEN_900, weight=ft.FontWeight.BOLD)),
-                            DataCell(Text(f"{row["profit_percent"]:.2f}%", color=Colors.RED_900 if row["profit_percent"] < 0 else Colors.GREEN_900, weight=ft.FontWeight.BOLD)),
+                            DataCell(Text(f"{row['currency']}{row['autobuy_price']:.2f}")),
+                            DataCell(Text(f"{row['currency']}{row['price']:.2f}")),
+                            DataCell(Text(f"{row['currency']}{row['profit']:.2f}", color=Colors.RED_900 if row['profit'] < 0 else Colors.GREEN_900, weight=ft.FontWeight.BOLD)),
+                            DataCell(Text(f"{row['profit_percent']:.2f}%", color=Colors.RED_900 if row['profit_percent'] < 0 else Colors.GREEN_900, weight=ft.FontWeight.BOLD)),
                             DataCell(Text(row["item_nameid"]))
                         ],
                     ) for row in page.data["data_skins_table"]  or []
@@ -165,10 +165,10 @@ async def create_skins_table_datatable(page: ft.Page, fetch_data_callback=None):
                             ),
                         ),
                         DataCell(Text(row["exterior"].replace("Exterior: ", ""))),
-                        DataCell(Text(f"{row["currency"]}{row["autobuy_price"]:.2f}")),
-                        DataCell(Text(f"{row["currency"]}{row["price"]:.2f}")),
-                        DataCell(Text(f"{row["currency"]}{row["profit"]:.2f}", color=Colors.RED_900 if row["profit"] < 0 else Colors.GREEN_900, weight=ft.FontWeight.BOLD)),
-                        DataCell(Text(f"{row["profit_percent"]:.2f}%", color=Colors.RED_900 if row["profit_percent"] < 0 else Colors.GREEN_900, weight=ft.FontWeight.BOLD)),
+                        DataCell(Text(f"{row['currency']}{row['autobuy_price']:.2f}")),
+                        DataCell(Text(f"{row['currency']}{row['price']:.2f}")),
+                        DataCell(Text(f"{row['currency']}{row['profit']:.2f}", color=Colors.RED_900 if row['profit'] < 0 else Colors.GREEN_900, weight=ft.FontWeight.BOLD)),
+                        DataCell(Text(f"{row['profit_percent']:.2f}%", color=Colors.RED_900 if row['profit_percent'] < 0 else Colors.GREEN_900, weight=ft.FontWeight.BOLD)),
                         DataCell(
                             Row(
                                 controls=[
@@ -267,13 +267,13 @@ async def create_auto_table_datatable(page: ft.Page, fetch_data_callback, souven
                         ),
                     ),
                     DataCell(Text(row["exterior"])),
-                    DataCell(Text(f"$ {row["autobuy_price"]:.2f}")),
-                    DataCell(Text(f"$ {row["price"]:.2f}")),
+                    DataCell(Text(f"$ {row['autobuy_price']:.2f}")),
+                    DataCell(Text(f"$ {row['price']:.2f}")),
                     DataCell(
-                        Text(f"$ {row["profit"]:.2f}", color=Colors.RED_900 if row["profit"] < 0 else Colors.GREEN_900,
+                        Text(f"$ {row['profit']:.2f}", color=Colors.RED_900 if row['profit'] < 0 else Colors.GREEN_900,
                              weight=ft.FontWeight.BOLD)),
-                    DataCell(Text(f"{row["profit_percent"]:.2f}%",
-                                  color=Colors.RED_900 if row["profit_percent"] < 0 else Colors.GREEN_900,
+                    DataCell(Text(f"{row['profit_percent']:.2f}%",
+                                  color=Colors.RED_900 if row['profit_percent'] < 0 else Colors.GREEN_900,
                                   weight=ft.FontWeight.BOLD)),
                     DataCell(Text(row["total_sales_month"], text_align=TextAlign.CENTER)),
                     DataCell(Text(row["item_nameid"]))
