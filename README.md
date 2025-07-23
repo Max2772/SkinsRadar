@@ -2,7 +2,7 @@
 ## [➡ Russian ReadMe](docs/RuREADME.md)
 
 <img src="assets/icon_white.png" alt="SkinsRadar Logo" width="200"/>
-<img src="https://img.shields.io/badge/python-3.12-blue.svg" alt="Python" />
+<img src="https://img.shields.io/badge/python-3.9--3.13-blue.svg" alt="Python" />
 
 
 SkinsRadar is a powerful **CS2 skins monitoring tool** for [steamcommunity.com](https://steamcommunity.com) 🚀. It helps you track and analyze skin prices, bypass Steam's request limits using proxies (**❗Only socks4:// socks5://** ), and find profitable deals for trading or other purposes. **No account registration or login required** 🔑—dive right in!
@@ -40,7 +40,7 @@ With two core modes—**Radar Mode** ⚡ for rapid scanning of all CS2 items and
 
 ## 🛠️ Installation
 
-SkinsRadar requires **Python 3.12** for optimal performance (other versions are not tested) 🐍.
+SkinsRadar is tested and supported on Python 3.9 to 3.13 for optimal performance 🐍.
 
 1. **Clone the repository**:
    ```bash
@@ -57,10 +57,8 @@ SkinsRadar requires **Python 3.12** for optimal performance (other versions are 
 4. **Initialize the skins database** (optional) 🗄️:
    - Use the `Update Skins Database` button to create or update the CS2 items database.
 
-> **Note**: Pre-built binaries for **Windows** and **Linux** are available in the `build/` directory 📦.
-
 ### Dependencies 📋
-- Python 3.12
+- Python 3.9–3.13
 - `flet==0.28.3`
 - `httpx==0.28.1`
 - `httpx_socks==0.10.1`
